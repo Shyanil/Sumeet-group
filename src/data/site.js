@@ -1,54 +1,62 @@
 /**
- * Single source of truth for brand-level strings and shared assets.
- * Header, Hero and Footer all read from here so a rename stays a one-line change.
+ * Brand-level strings and shared assets.
+ *
+ * Sources: the Sumeet Urban Nest brochure (15.05.2026) for contact details and
+ * the group profile, the STC brochure and site for Trade Centre facts.
+ * Anything not confirmed by those documents is marked TODO rather than invented.
  */
 
-export const BRAND = 'Sumeet Group'
-export const TAGLINE = 'Raipur · Chhattisgarh'
+export const BRAND = {
+  name: 'Sumeet Group',
+  legal: 'Sumeet Infracon Pvt. Ltd.',
+  city: 'Raipur',
+  state: 'Chhattisgarh',
+  tagline: 'Raipur · Chhattisgarh',
+  promise: 'Building spaces that inspire better living.',
+}
 
-export const LOGO = './Assets/LOGO (with source file)/logo.png'
-export const BROCHURE = './Assets/Brochure/STC BROCHURE.pdf'
-export const BROCHURE_FILENAME = 'Sumeet-Group-Brochure.pdf'
+export const LOGO = {
+  lockup: '/Assets/Brand/sumeet-group-lockup.png',
+  reversed: '/Assets/Brand/sumeet-group-lockup-reversed.png',
+  mark: '/Assets/Brand/sumeet-group-mark.png',
+}
 
-export const ADDRESS = 'Pachpedi Naka Chowk, Raipur, Chhattisgarh'
-export const ADDRESS_LINES = ['Pachpedi Naka Chowk', 'Raipur, Chhattisgarh']
-export const MAP_DIRECTIONS =
-  'https://www.google.com/maps/dir/?api=1&destination=Pachpedi%20Naka%20Chowk%2C%20Raipur%2C%20Chhattisgarh'
+export const CONTACT = {
+  phone: '+91 7247 724 758',
+  phoneHref: 'tel:+917247724758',
+  email: 'sales@sumeetinfraventurs.com',
+  emailHref: 'mailto:sales@sumeetinfraventurs.com',
+  website: 'sumeetinfraventures.com',
+  websiteHref: 'https://sumeetinfraventures.com',
+  hours: 'Mon–Sun, 10am–7pm',
+  office: {
+    label: 'Corporate office',
+    lines: ['Sumeet Business Park, Pachpedi Naka', 'Raipur (Chhattisgarh) — 492001'],
+    mapHref:
+      'https://www.google.com/maps/search/?api=1&query=Sumeet%20Business%20Park%2C%20Pachpedi%20Naka%2C%20Raipur',
+  },
+}
 
-/* TODO — placeholder enquiry details. Swap for the real phone / email before launch. */
-export const PHONE = '+91 00000 00000'
-export const PHONE_HREF = 'tel:+910000000000'
-export const EMAIL = 'info@sumeetgroup.in'
-
-export const PROJECT_FACTS = '3 Towers · G+7 Floors · Vastu Compliant · RERA Registered'
-
-export const NAV_ITEMS = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Why Choose Us', href: '#why-stc' },
-  { label: 'Amenities', href: '#amenities' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Master Plan', href: '#master-plan' },
-  { label: 'Location', href: '#location' },
+/**
+ * Group-level track record.
+ *
+ * Every figure here is countable from the portfolio or stated in the
+ * brochures. The design system's sample data carried a founding year and a
+ * sq-ft-delivered number that its own caveats flag as placeholders, so those
+ * are deliberately absent — add them once the client confirms.
+ */
+export const GROUP_STATS = [
+  { value: '4', label: 'Landmark projects' },
+  { value: '3', label: 'Categories', sub: 'Homes · Commercial · Plotted' },
+  { value: '2', label: 'Now selling' },
+  { value: '100%', label: 'RERA registered' },
 ]
 
-/** Force a download rather than letting the browser open the PDF inline. */
-export function downloadBrochure(event) {
-  if (event) event.preventDefault()
-  const link = document.createElement('a')
-  link.href = BROCHURE
-  link.download = BROCHURE_FILENAME
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
+export const NAV = [
+  { label: 'Home', to: '/' },
+  { label: 'Projects', to: '/projects' },
+  { label: 'About', to: '/about' },
+  { label: 'Contact', to: '/contact' },
+]
 
-/** Smooth-scroll to an in-page anchor, falling back to the top of the page. */
-export function scrollToSection(href) {
-  const target = href && href !== '#home' ? document.querySelector(href) : null
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-}
+export const RERA_PORTAL = 'https://rera.cgstate.gov.in'

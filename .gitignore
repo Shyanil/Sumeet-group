@@ -26,3 +26,14 @@ dist-ssr
 # Local caches / tooling
 .npm-cache
 .netlify
+
+# Print-resolution originals. These are the masters the web assets in
+# public/Assets are derived from — the Urban Nest brochure alone is 414 MB,
+# well past GitHub's 100 MB file limit, and the area comparison is internal
+# competitor analysis that must never reach a public directory.
+# Keep them in cloud storage; regenerate web copies rather than committing.
+source-assets/
+
+# Design-system source bundles (multi-MB, embedded fonts and images)
+Sumeet Design System.html
+Sumeet Group Website UI With Images.html

@@ -1,98 +1,78 @@
-import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
-import {
-  ADDRESS_LINES,
-  BRAND,
-  EMAIL,
-  LOGO,
-  MAP_DIRECTIONS,
-  NAV_ITEMS,
-  PHONE,
-  PHONE_HREF,
-  PROJECT_FACTS,
-  scrollToSection,
-} from '../data/site'
+import { Link } from '../lib/router'
+import { BRAND, CONTACT, RERA_PORTAL } from '../data/site'
+import { PROJECTS } from '../data/projects'
+import BrandLockup from './BrandLockup'
 
-const YEAR = new Date().getFullYear()
+function Column({ title, children }) {
+  return (
+    <div>
+      <div className="footer-col__title">{title}</div>
+      <div className="footer-col__list">{children}</div>
+    </div>
+  )
+}
 
 export default function Footer() {
-  const handleNavClick = (event, href) => {
-    event.preventDefault()
-    scrollToSection(href)
-  }
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="stc-foot" aria-labelledby="stc-foot-heading">
-      <span className="stc-foot__seam" aria-hidden="true" />
-
-      <div className="stc-foot__inner">
-        <div className="stc-foot__top">
-          {/* Brand */}
-          <div className="stc-foot__brand">
-            <img className="stc-foot__logo" src={LOGO} alt={`${BRAND} logo`} loading="lazy" />
-            <h2 className="stc-foot__title" id="stc-foot-heading">
-              {BRAND}
-            </h2>
-            <p className="stc-foot__blurb">
-              A premium commercial destination at the heart of Raipur — designed
-              for clarity, growth, and everyday ease.
-            </p>
-            <p className="stc-foot__facts">{PROJECT_FACTS}</p>
+    <footer className="site-footer">
+      <div className="wrap">
+        <div className="site-footer__grid">
+          <div>
+            <BrandLockup reversed />
+            <p className="site-footer__tagline">{BRAND.promise}</p>
           </div>
 
-          {/* Explore */}
-          <nav className="stc-foot__col" aria-label="Footer navigation">
-            <h3 className="stc-foot__label">Explore</h3>
-            <ul className="stc-foot__links">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <a href={item.href} onClick={(event) => handleNavClick(event, item.href)}>
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <Column title="Projects">
+            {PROJECTS.map((p) => (
+              <Link key={p.slug} to={`/projects/${p.slug}`} className="footer-link">
+                {p.name}
+              </Link>
+            ))}
+            <Link to="/projects" className="footer-link">
+              All projects
+            </Link>
+          </Column>
 
-          {/* Contact */}
-          <div className="stc-foot__col">
-            <h3 className="stc-foot__label">Get in Touch</h3>
-            <ul className="stc-foot__contact">
-              <li>
-                <MapPin size={17} strokeWidth={1.75} aria-hidden="true" />
-                <a href={MAP_DIRECTIONS} target="_blank" rel="noopener noreferrer">
-                  {ADDRESS_LINES.map((line) => (
-                    <span key={line}>{line}</span>
-                  ))}
-                </a>
-              </li>
-              <li>
-                <Phone size={17} strokeWidth={1.75} aria-hidden="true" />
-                <a href={PHONE_HREF}>{PHONE}</a>
-              </li>
-              <li>
-                <Mail size={17} strokeWidth={1.75} aria-hidden="true" />
-                <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-              </li>
-            </ul>
-          </div>
+          <Column title="Company">
+            <Link to="/about" className="footer-link">
+              About us
+            </Link>
+            <Link to="/about" className="footer-link">
+              Track record
+            </Link>
+            <Link to="/contact" className="footer-link">
+              Contact
+            </Link>
+            <a href={RERA_PORTAL} className="footer-link" target="_blank" rel="noreferrer noopener">
+              RERA Chhattisgarh
+            </a>
+          </Column>
 
+          <Column title="Get in touch">
+            <a href={CONTACT.phoneHref} className="footer-link">
+              {CONTACT.phone}
+            </a>
+            <a href={CONTACT.emailHref} className="footer-link">
+              {CONTACT.email}
+            </a>
+            <a href={CONTACT.websiteHref} className="footer-link" target="_blank" rel="noreferrer noopener">
+              {CONTACT.website}
+            </a>
+            <a href={CONTACT.office.mapHref} className="footer-link" target="_blank" rel="noreferrer noopener">
+              {CONTACT.office.lines.join(', ')}
+            </a>
+          </Column>
         </div>
 
-        <div className="stc-foot__bottom">
-          <p className="stc-foot__copy">
-            © {YEAR} {BRAND}. All rights reserved.
-          </p>
-          <p className="stc-foot__note">
-            Renders are artistic impressions and subject to change. RERA registered.
-          </p>
-          <button
-            type="button"
-            className="stc-foot__top-link"
-            onClick={() => scrollToSection('#home')}
-          >
-            Back to top
-            <ArrowUpRight size={15} strokeWidth={2} aria-hidden="true" />
-          </button>
+        <div className="site-footer__bottom">
+          <span>
+            {BRAND.legal} · {CONTACT.office.lines.join(', ')}
+          </span>
+          <span>
+            © {year} {BRAND.name} · RERA registered
+          </span>
         </div>
       </div>
     </footer>

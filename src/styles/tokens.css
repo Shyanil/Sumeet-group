@@ -1,0 +1,262 @@
+/* ============================================================
+   Sumeet Group — Design tokens
+   Ported verbatim from the approved design system (v1.0).
+   Sourced from the logo: gold #DDAD67, vermilion #FF2E17, charcoal #2C2E35.
+   Cool charcoal ink on warm sand paper; gold is the decorative brand
+   accent. The logo's hot vermilion stays logo-only; UI actions use a
+   desaturated "brick" scale drawn from the same hue family.
+   ============================================================ */
+
+:root {
+  /* --- Brand anchors (exact logo values) ------------------ */
+  --brand-gold: #DDAD67;
+  --brand-vermilion: #FF2E17;  /* logo-only — never for UI */
+  --brand-charcoal: #2C2E35;
+
+  /* --- Gold scale (brand / decorative) -------------------- */
+  --gold-50:  #FBF6EC;
+  --gold-100: #F5EAD3;
+  --gold-200: #ECD8AE;
+  --gold-300: #E3C68C;
+  --gold-400: #DDAD67;  /* brand */
+  --gold-500: #CD9A4D;
+  --gold-600: #B6843B;
+  --gold-700: #946730;  /* accessible gold text on light */
+  --gold-800: #6F4E23;
+  --gold-900: #4A3415;
+
+  /* --- Brick scale (action / danger — the logo red, tempered) --- */
+  --brick-50:  #FAF0EC;
+  --brick-100: #F3DDD4;
+  --brick-200: #E5B9A9;
+  --brick-300: #D4937D;
+  --brick-400: #BF6A4F;
+  --brick-500: #A84C30;  /* default action */
+  --brick-600: #933D24;
+  --brick-700: #7A301B;
+  --brick-800: #5F2513;
+  --brick-900: #451A0D;
+
+  /* --- Ink scale (charcoal neutrals, text) ---------------- */
+  --ink-950: #191A1F;
+  --ink-900: #2C2E35;  /* brand charcoal — primary text */
+  --ink-800: #3B3D46;
+  --ink-700: #4F515B;
+  --ink-600: #6A6C77;
+  --ink-500: #888A95;
+  --ink-400: #A7A9B3;
+  --ink-300: #C7C8CF;
+  --ink-200: #E1E1E6;
+  --ink-100: #EEEEF1;
+  --ink-50:  #F7F7F9;
+
+  /* --- Sand scale (warm paper surfaces / hairlines) ------- */
+  --sand-50:  #FBFAF7;
+  --sand-100: #F6F3EC;
+  --sand-200: #EDE8DC;
+  --sand-300: #E2DBCB;
+  --sand-400: #D2C9B4;
+  --sand-500: #B8AD93;
+
+  /* --- Supporting (grounded, low-chroma) ------------------ */
+  --green-500:  #2E7D5B;
+  --green-50:   #E9F4EE;
+  --amber-500:  #C18A2B;
+  --amber-50:   #FAF1DD;
+  --blue-500:   #2C6E8F;
+  --blue-50:    #E7F0F4;
+
+  /* ========================================================
+     Semantic aliases — use these in components.
+     ======================================================== */
+
+  /* Backgrounds & surfaces */
+  --color-bg:            var(--sand-50);    /* page */
+  --color-bg-sunken:     var(--sand-100);   /* recessed sections */
+  --color-surface:       #FFFFFF;           /* cards, sheets */
+  --color-surface-soft:  var(--sand-50);
+  --color-surface-inset: var(--sand-100);   /* inputs, wells */
+  --color-ink-surface:   #23242A;           /* dark sections / footer */
+  --color-ink-surface-2: #2C2E35;
+
+  /* Text */
+  --text-strong:  var(--ink-900);
+  --text-body:    var(--ink-800);
+  --text-soft:    var(--ink-600);
+  --text-muted:   var(--ink-500);
+  --text-on-dark: var(--sand-100);
+  --text-on-dark-soft: #ADAFB8;
+  --text-on-action: #FFFFFF;
+  --text-gold:    var(--gold-700);          /* gold text that passes on light */
+
+  /* Lines & dividers (warm hairlines) */
+  --color-line:        var(--sand-200);
+  --color-line-strong: var(--sand-300);
+  --color-line-ink:    var(--ink-200);
+  --color-line-on-dark: rgba(255, 255, 255, 0.12);
+
+  /* Brand accents */
+  --color-gold:      var(--gold-400);
+  --color-gold-deep: var(--gold-700);
+  --color-gold-tint: var(--gold-100);
+  --color-gold-line: var(--gold-300);
+
+  /* Action (brick) */
+  --color-action:       var(--brick-500);
+  --color-action-hover: var(--brick-600);
+  --color-action-press: var(--brick-700);
+  --color-action-tint:  var(--brick-50);
+
+  /* Focus */
+  --color-focus: var(--gold-600);
+  --focus-ring: 0 0 0 3px rgba(182, 132, 59, 0.35);
+
+  /* Status */
+  --color-success: var(--green-500); --color-success-bg: var(--green-50);
+  --color-warning: var(--amber-500); --color-warning-bg: var(--amber-50);
+  --color-danger:  var(--brick-700); --color-danger-bg: var(--brick-50);
+  --color-info:    var(--blue-500);  --color-info-bg: var(--blue-50);
+
+  /* Selection */
+  --color-selection: var(--gold-200);
+
+  /* ========================================================
+     Typography — Newsreader (display) · Hanken Grotesk (UI)
+     · DM Mono (specs, figures, eyebrows)
+     ======================================================== */
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Hanken Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* Size scale (~1.22 ratio) */
+  --text-2xs: 0.6875rem;  /* 11 */
+  --text-xs:  0.75rem;    /* 12 */
+  --text-sm:  0.875rem;   /* 14 */
+  --text-base: 1rem;      /* 16 */
+  --text-md:  1.125rem;   /* 18 */
+  --text-lg:  1.375rem;   /* 22 */
+  --text-xl:  1.75rem;    /* 28 */
+  --text-2xl: 2.125rem;   /* 34 */
+  --text-3xl: 2.75rem;    /* 44 */
+  --text-4xl: 3.5rem;     /* 56 */
+  --text-5xl: 4.5rem;     /* 72 */
+  --text-6xl: 5.75rem;    /* 92 */
+
+  --leading-none: 1;
+  --leading-tight: 1.12;
+  --leading-snug: 1.28;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --tracking-tighter: -0.03em;
+  --tracking-tight: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+  --tracking-wider: 0.12em;   /* eyebrows / mono labels */
+  --tracking-widest: 0.22em;
+
+  /* Semantic type roles */
+  --display-font: var(--font-display);
+  --display-weight: var(--weight-medium);
+  --display-leading: var(--leading-tight);
+  --display-tracking: var(--tracking-tight);
+
+  --eyebrow-font: var(--font-mono);
+  --eyebrow-size: var(--text-xs);
+  --eyebrow-weight: var(--weight-medium);
+  --eyebrow-tracking: var(--tracking-wider);
+
+  --body-font: var(--font-sans);
+  --body-size: var(--text-base);
+  --body-leading: var(--leading-relaxed);
+
+  --figure-font: var(--font-mono);
+
+  /* ========================================================
+     Spacing, radii, containers — 4px base grid
+     ======================================================== */
+  --space-0: 0;
+  --space-1: 0.25rem;   /* 4  */
+  --space-2: 0.5rem;    /* 8  */
+  --space-3: 0.75rem;   /* 12 */
+  --space-4: 1rem;      /* 16 */
+  --space-5: 1.5rem;    /* 24 */
+  --space-6: 2rem;      /* 32 */
+  --space-7: 2.5rem;    /* 40 */
+  --space-8: 3rem;      /* 48 */
+  --space-9: 4rem;      /* 64 */
+  --space-10: 5rem;     /* 80 */
+  --space-11: 6rem;     /* 96 */
+  --space-12: 8rem;     /* 128 */
+
+  /* Radii — architectural, restrained (crisp not pill-y) */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+  --radius-card: var(--radius-md);
+
+  --border-hairline: 1px;
+  --border-thick: 1.5px;
+  --border-frame: 2px;
+
+  /* Containers */
+  --container-sm: 40rem;    /* 640  */
+  --container-md: 52rem;    /* 832  */
+  --container-lg: 68rem;    /* 1088 */
+  --container-xl: 78rem;    /* 1248 */
+  --gutter: var(--space-5);
+
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-overlay: 500;
+  --z-modal: 1000;
+  --z-toast: 1500;
+
+  /* ========================================================
+     Effects — warm-tinted, restrained (architectural)
+     ======================================================== */
+  --shadow-xs: 0 1px 2px rgba(44, 46, 53, 0.06);
+  --shadow-sm: 0 1px 3px rgba(44, 46, 53, 0.08), 0 1px 2px rgba(44, 46, 53, 0.04);
+  --shadow-md: 0 4px 14px -4px rgba(44, 46, 53, 0.12), 0 2px 6px -2px rgba(44, 46, 53, 0.07);
+  --shadow-lg: 0 18px 40px -16px rgba(44, 46, 53, 0.20), 0 6px 14px -8px rgba(44, 46, 53, 0.10);
+  --shadow-xl: 0 40px 80px -28px rgba(44, 46, 53, 0.28);
+  --shadow-gold: 0 10px 30px -12px rgba(182, 132, 59, 0.35);
+
+  /* Motion — quiet, confident easing. No bounce. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0.05, 0.36, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 360ms;
+  --transition-base: all var(--duration-base) var(--ease-out);
+
+  /* The facet motif — thin gold geometric lines derived from the
+     logo's octagon "gem". A subtle decorative texture. */
+  --facet-line: var(--gold-300);
+  --facet-grid:
+    repeating-linear-gradient(45deg,  transparent 0 26px, rgba(221, 173, 103, 0.10) 26px 27px),
+    repeating-linear-gradient(-45deg, transparent 0 26px, rgba(221, 173, 103, 0.10) 26px 27px);
+}
+
+/* Fluid display sizes — the scale above holds at desktop, and steps
+   down gracefully on small screens without a cliff at each breakpoint. */
+:root {
+  --display-hero: clamp(2.375rem, 1.25rem + 4.6vw, 4.25rem);   /* 38 → 68 */
+  --display-page: clamp(2rem, 1.2rem + 3.2vw, 3.25rem);        /* 32 → 52 */
+  --display-section: clamp(1.75rem, 1.2rem + 2.1vw, 2.5rem);   /* 28 → 40 */
+  --display-card: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);     /* 20 → 24 */
+
+  /* Section rhythm — sections breathe at 64–128px */
+  --section-y: clamp(3.5rem, 2rem + 5vw, 6rem);
+  --section-y-lg: clamp(4.5rem, 2.5rem + 6.5vw, 7.5rem);
+}
