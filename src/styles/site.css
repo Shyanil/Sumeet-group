@@ -7,28 +7,30 @@
 .app__main { flex: 1; }
 
 /* ---------- Header ---------------------------------------- */
+/* White, not translucent paper: the bar is only ever see-through over the
+   hero, and everywhere else it sits on white so the type never has to
+   compete with whatever is passing underneath. See hero.css for the
+   transparent state and the travel. */
 .site-header {
   position: sticky; top: 0; z-index: var(--z-sticky);
-  background: rgba(251, 250, 247, 0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: #fff;
   border-bottom: 1px solid var(--color-line);
 }
 
 .site-header__inner {
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--space-4);
-  height: 72px;
+  height: var(--header-h);
 }
 
-@media (min-width: 900px) { .site-header__inner { height: 76px; } }
+@media (min-width: 900px) { :root { --header-h: 76px; } }
 
 .brand-lockup {
   display: flex; align-items: center; gap: 11px;
   background: none; border: 0; padding: 0; cursor: pointer;
   color: inherit; text-decoration: none;
 }
-.brand-lockup__mark { height: 38px; width: auto; flex: none; }
+.brand-lockup__mark { height: 46px; width: auto; flex: none; }
 .brand-lockup__text { display: flex; flex-direction: column; line-height: 1; text-align: left; }
 .brand-lockup__name {
   font-family: var(--font-sans); font-weight: var(--weight-extrabold);
@@ -43,6 +45,7 @@
 .brand-lockup--reversed .brand-lockup__sub { color: var(--text-on-dark-soft); }
 
 @media (min-width: 480px) { .brand-lockup__name { font-size: 16px; } }
+@media (min-width: 900px) { .brand-lockup__mark { height: 54px; } }
 
 .site-nav { display: none; align-items: center; gap: 30px; }
 @media (min-width: 980px) { .site-nav { display: flex; } }
@@ -196,6 +199,14 @@
 /* ---------- Approach / numbered list ---------------------- */
 .split-intro { display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
 @media (min-width: 900px) { .split-intro { grid-template-columns: 0.85fr 1.15fr; } }
+@media (min-width: 1440px) { .split-intro { grid-template-columns: 0.68fr 1.32fr; } }
+@media (min-width: 900px) {
+  .split-intro > .section-head {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-7));
+    align-self: start;
+  }
+}
 
 .point-grid { display: grid; gap: var(--space-7) var(--space-6); grid-template-columns: 1fr; }
 @media (min-width: 560px) { .point-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -206,28 +217,6 @@
   color: var(--ink-900); margin: 10px 0 6px;
 }
 .point__d { font-size: 14.5px; line-height: 1.55; color: var(--text-soft); }
-
-/* ---------- CTA band -------------------------------------- */
-.cta-band {
-  position: relative; overflow: hidden;
-  border-radius: var(--radius-lg);
-  background: var(--gold-400);
-  padding: clamp(2rem, 5vw, 3.5rem);
-}
-.cta-band::before {
-  content: ''; position: absolute; inset: 0; opacity: 0.5; pointer-events: none;
-  background-image: repeating-linear-gradient(-30deg, transparent 0 44px, rgba(44, 46, 53, 0.10) 44px 45px);
-}
-.cta-band__inner {
-  position: relative; display: flex; justify-content: space-between;
-  align-items: center; gap: var(--space-5); flex-wrap: wrap;
-}
-.cta-band__title {
-  font-family: var(--font-display); font-weight: var(--weight-medium);
-  font-size: var(--display-section); letter-spacing: var(--tracking-tight);
-  color: var(--ink-900); text-wrap: balance;
-}
-.cta-band__copy { font-size: 16.5px; color: rgba(44, 46, 53, 0.72); margin-top: 10px; max-width: 48ch; }
 
 /* ---------- Page head ------------------------------------- */
 .page-head {

@@ -1,0 +1,401 @@
+/* ============================================================
+   Portfolio — the home page's dark project band.
+
+   Co-located with its component, like ServicesSection.css and
+   RealEstateArrowsSection.css: it reads the design system's tokens and
+   owns no globals.
+
+   The photograph is the card. No radius, no border, no shadow, no panel —
+   the only thing between the image and the type is a gradient. Everything
+   here that looks like a surface is actually a crop.
+
+   One note on the background. The Services strips directly above this band
+   sit on --ink-950; this section is a step darker so the two read as two
+   sections rather than one long slab, with a hairline at the seam.
+   ============================================================ */
+
+.portfolio {
+  /* The reference's charcoal, kept local to this component rather than
+     promoted to a token — the design system's dark surface is --ink-950
+     and this is a one-section variation on it, not a new semantic role. */
+  --_bg: #141618;
+  --_grey-1: rgba(255, 255, 255, 0.62);
+  --_grey-2: rgba(255, 255, 255, 0.42);
+
+  position: relative;
+  background: var(--_bg);
+  color: var(--text-on-dark);
+  padding-block: clamp(3rem, 2rem + 4.4vw, 5.5rem);   /* 64 → 130 */
+  /* `clip` rather than `hidden` — same job without turning the section into
+     a scroll container, the call base.css already makes on body. */
+  overflow-x: clip;
+}
+
+.portfolio::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 1 · intro ---------------------------------------- *
+   Heading hard left, the paragraph and its button starting around the
+   middle of the measure. Below 1024px the two simply stack. */
+
+.portfolio__intro {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.875rem, 1.2rem + 2.4vw, 3rem);
+  margin-bottom: clamp(3.5rem, 2rem + 4.5vw, 6.875rem);   /* 56 → 110 */
+}
+
+@media (min-width: 1024px) {
+  .portfolio__intro {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr);
+    align-items: start;
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+
+.portfolio__heading {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  /* Sans, not the display serif: the same call RealEstateArrowsSection
+     makes for its statement line. Weight stays at medium — the size is
+     doing the work, not the stroke. */
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  /* Sized to the column, not the window. One column here, so it can be
+     generous; the two-column rule below re-scales it against the 0.85fr
+     track, where 78px would break every line in two. */
+  font-size: clamp(2.625rem, 1.2rem + 8vw, 4rem);   /* 42 → 64 */
+  line-height: 1;
+  letter-spacing: -0.032em;
+  color: var(--sand-50);
+}
+
+@media (min-width: 1024px) {
+  .portfolio__heading { font-size: clamp(2.75rem, 0.9rem + 4.2vw, 4.25rem); }   /* 44 → 68 */
+}
+
+/* The lines step back rather than the whole heading being white: grey in the
+   middle, gold to close. See the house rule in ServicesSection.css. */
+.portfolio__heading span:nth-child(2) { color: var(--_grey-1); }
+.portfolio__heading span:nth-child(3) { color: var(--gold-300); }
+
+.portfolio__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);
+}
+
+.portfolio__lede {
+  margin: 0;
+  max-width: 42rem;   /* 672 — the reference's 600–700px measure */
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  font-size: clamp(1.1875rem, 0.95rem + 0.85vw, 1.75rem);   /* 19 → 28 */
+  line-height: 1.34;
+  letter-spacing: -0.014em;
+  color: var(--sand-50);
+  text-wrap: pretty;
+}
+
+/* The opening claim stays white and the qualification drops back. Kept at
+   0.66 rather than the heading's greys: this is body size, so it has to
+   clear 4.5:1, not 3:1. */
+.portfolio__lede span { color: rgba(255, 255, 255, 0.66); }
+
+/* ---------- 2 · the white pill ------------------------------- */
+
+.portfolio__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 10px 0 26px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
+  background: var(--sand-50);
+  color: var(--ink-950);
+  border: 1px solid var(--sand-50);
+  text-decoration: none;
+  transition:
+    background var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+}
+
+/* base.css scopes prose-link colour broadly enough to repaint this on
+   hover — the same guard .sg-btn and .sg-prop carry. */
+a.portfolio__cta,
+a.portfolio__cta:hover,
+a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
+
+.portfolio__cta:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.portfolio__cta-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(25, 26, 31, 0.1);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+.portfolio__cta-icon svg { width: 16px; height: 16px; display: block; }
+
+@media (hover: hover) {
+  .portfolio__cta:hover { background: #fff; border-color: #fff; }
+  .portfolio__cta:hover .portfolio__cta-icon,
+  .portfolio__cta:focus-visible .portfolio__cta-icon { transform: translateX(4px); }
+}
+
+/* ---------- 3 · the grid ------------------------------------- */
+
+.portfolio__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 0.6rem + 1.2vw, 1.5rem);   /* 16 → 24 */
+}
+
+.portfolio__grid > * { min-width: 0; }
+
+@media (min-width: 640px) {
+  .portfolio__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Four across rather than the reference's three, because the portfolio is
+   four deep. The cards narrow; the row stays one row. */
+@media (min-width: 1280px) {
+  .portfolio__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ---------- 4 · the card ------------------------------------- */
+
+.portfolio__card {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  /* Explicit, and load-bearing. An aspect-ratio box with `width: auto` runs
+     the ratio backwards when min-height raises the height — the card came
+     out wider than its own grid track and overlapped its neighbour. A
+     definite width makes the ratio one-directional. */
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  /* The floor, not the height: at 1280 the tracks are ~280px and 4/5 would
+     put the copy and the button on top of each other. */
+  min-height: 30rem;
+  border-radius: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ink-950);
+  text-decoration: none;
+}
+
+a.portfolio__card,
+a.portfolio__card:hover,
+a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
+
+/* Full-bleed photography has no inner edge to offset a ring against, so the
+   ring is drawn inside the card — the call ServicesSection makes too. */
+.portfolio__card:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: -6px;
+}
+
+@media (min-width: 640px) {
+  .portfolio__card { aspect-ratio: 3 / 4; min-height: 28rem; }
+}
+
+/* Four columns is the tightest the card ever gets — ~280px of track at
+   1280. The floor goes up rather than down: the copy needs the room the
+   ratio no longer gives it. */
+@media (min-width: 1280px) {
+  .portfolio__card { min-height: 31rem; }
+}
+
+.portfolio__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.portfolio__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;   /* per-image override comes from the data */
+  display: block;
+  transform: scale(1.001);   /* a resting transform keeps the scale-up crisp */
+  transition: transform 620ms var(--ease-out);
+}
+
+/* Heavier at the head and the foot than the reference's, because two of
+   these four photographs open on bright sky and the title sits at the top.
+   The middle is left as close to clear as the type allows. Lower these and
+   re-check the title on City of Dreams — it is the first thing to fail. */
+.portfolio__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(8, 10, 13, 0.70) 0%,
+    rgba(8, 10, 13, 0.34) 34%,
+    rgba(8, 10, 13, 0.42) 62%,
+    rgba(8, 10, 13, 0.82) 100%
+  );
+  transition: opacity 620ms var(--ease-out);
+}
+
+.portfolio__body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+  padding: clamp(1.5rem, 1rem + 1.4vw, 2.25rem);   /* 24 → 36 */
+}
+
+.portfolio__status {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-200);
+}
+/* 0.78, not the heading's greys: this is 11px, so it has to clear 4.5:1
+   against the brightest photograph in the row — City of Dreams opens on a
+   blown sky, and it is the label that fails there first, not the title. */
+.portfolio__status--delivered { color: rgba(255, 255, 255, 0.78); }
+
+.portfolio__title {
+  display: flex;
+  flex-direction: column;
+  margin: clamp(0.75rem, 1.4vw, 1.125rem) 0 0;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: clamp(1.875rem, 1.25rem + 1.3vw, 2.375rem);   /* 30 → 38 */
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  color: #fff;
+  transition: transform 620ms var(--ease-out);
+}
+
+@media (min-width: 1280px) {
+  .portfolio__title { font-size: clamp(1.625rem, 1rem + 1vw, 2rem); }   /* 26 → 32 */
+}
+
+.portfolio__foot {
+  margin-top: auto;   /* pins the buttons to one line across the row */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1.125rem, 2vw, 1.5rem);
+  padding-top: var(--space-6);
+}
+
+.portfolio__copy {
+  margin: 0;
+  max-width: 21rem;   /* 336 */
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: clamp(0.9375rem, 0.88rem + 0.2vw, 1.0625rem);   /* 15 → 17 */
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  text-wrap: pretty;
+}
+
+/* Reads as a button and is sized like one, though the whole card is the
+   link — so it is the affordance, not a second tap target. */
+.portfolio__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  color: #fff;
+  transition:
+    background var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+}
+
+.portfolio__more-icon {
+  display: inline-flex;
+  align-items: center;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+.portfolio__more-icon svg { width: 16px; height: 16px; display: block; }
+
+/* ---------- 5 · interaction ---------------------------------- *
+   Pointer only: a touch device fires :hover on tap and would leave a card
+   stuck in its hovered state after navigating back. */
+
+@media (hover: hover) {
+  .portfolio__card:hover .portfolio__media img,
+  .portfolio__card:focus-visible .portfolio__media img {
+    transform: scale(1.045);
+  }
+
+  .portfolio__card:hover .portfolio__veil,
+  .portfolio__card:focus-visible .portfolio__veil {
+    opacity: 0.88;
+  }
+
+  .portfolio__card:hover .portfolio__title,
+  .portfolio__card:focus-visible .portfolio__title {
+    transform: translateY(-3px);
+  }
+
+  .portfolio__card:hover .portfolio__more,
+  .portfolio__card:focus-visible .portfolio__more {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .portfolio__card:hover .portfolio__more-icon,
+  .portfolio__card:focus-visible .portfolio__more-icon {
+    transform: translateX(6px);
+  }
+}
+
+/* ---------- 6 · reduced motion ------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio__media img,
+  .portfolio__veil,
+  .portfolio__title,
+  .portfolio__more,
+  .portfolio__more-icon,
+  .portfolio__cta,
+  .portfolio__cta-icon {
+    transition: none;
+  }
+  .portfolio__card:hover .portfolio__media img { transform: scale(1.001); }
+  .portfolio__card:hover .portfolio__title { transform: none; }
+  .portfolio__card:hover .portfolio__more-icon { transform: none; }
+  .portfolio__cta:hover .portfolio__cta-icon { transform: none; }
+}

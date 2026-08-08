@@ -10,6 +10,10 @@ html {
   background: var(--color-bg);
 }
 
+/* Lenis is doing the easing now — native smooth scrolling on top of it
+   double-animates every in-page jump. */
+html.lenis { scroll-behavior: auto; }
+
 body {
   margin: 0;
   background: var(--color-bg);
@@ -21,8 +25,10 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   /* Wide media (plans, galleries) scrolls inside its own container —
-     the page body itself must never scroll sideways. */
-  overflow-x: hidden;
+     the page body itself must never scroll sideways. `clip` rather than
+     `hidden`: `hidden` turns <body> into a scroll container, which breaks
+     `position: sticky` inside it and confuses Lenis about who owns scroll. */
+  overflow-x: clip;
 }
 
 ::selection { background: var(--color-selection); color: var(--ink-900); }

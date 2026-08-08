@@ -26,9 +26,9 @@ export const PROJECTS = [
     locality: 'Khamardih, Raipur',
     kicker: "Shankar Nagar's first BOHK homes",
 
-    cover: `${SUN}/exterior-day.jpg`,
-    coverAlt: 'Sumeet Urban Nest — street elevation by day',
-    hero: `${SUN}/entrance-arrival.jpg`,
+    cover: `${SUN}/exterior-day.webp`,
+    coverAlt: 'Sumeet Urban Nest, street elevation by day',
+    hero: `${SUN}/entrance-arrival.webp`,
     heroAlt: 'The arrival court at Sumeet Urban Nest at dusk',
 
     blurb: '2 & 3 BHK homes where an outdoor room extends the floor plan, on 1.76 acres off Shankar Nagar.',
@@ -53,7 +53,7 @@ export const PROJECTS = [
     concept: {
       eyebrow: 'The idea',
       title: 'BHK keeps life inside. <em>BOHK</em> lets it flow outside.',
-      lede: 'Bedroom + Outdoor Room + Hall + Kitchen. The outdoor room is not a balcony bolted on at the end — it is planned as a room, and it changes what every other room can be.',
+      lede: 'Bedroom + Outdoor Room + Hall + Kitchen. The outdoor room is not a balcony bolted on at the end. It is planned as a room, and it changes what every other room can be.',
       pairs: [
         ['Indoor kids’ play area', 'Podium kids’ play'],
         ['Treadmill walk in the gym', 'Jogging tracks outside'],
@@ -63,14 +63,14 @@ export const PROJECTS = [
     },
 
     quote: {
-      text: 'We didn’t begin by drawing walls, we began by imagining how life should feel inside them. Homes should not end at enclosed rooms — they should extend into light, air and openness.',
+      text: 'We didn’t begin by drawing walls, we began by imagining how life should feel inside them. Homes should not end at enclosed rooms. They should extend into light, air and openness.',
       by: 'Stellar Design Studio · Architects',
     },
 
     highlights: [
       [
         'Low density',
-        '140 residences across 1.76 acres and three blocks — fewer homes per floor, so lobbies stay quiet and lifts stay free.',
+        '140 residences across 1.76 acres and three blocks. Fewer homes per floor, so lobbies stay quiet and lifts stay free.',
       ],
       [
         'Light and cross ventilation',
@@ -144,29 +144,29 @@ export const PROJECTS = [
     },
 
     gallery: [
-      { src: `${SUN}/entrance-arrival.jpg`, caption: 'Arrival court' },
-      { src: `${SUN}/exterior-day.jpg`, caption: 'Street elevation' },
-      { src: `${SUN}/aerial-twilight.jpg`, caption: 'Aerial view' },
-      { src: `${SUN}/podium-courtyard.jpg`, caption: 'Podium courtyard' },
-      { src: `${SUN}/kids-play.jpg`, caption: 'Children’s play area' },
-      { src: `${SUN}/balcony-view.jpg`, caption: 'The outdoor room' },
-      { src: `${SUN}/rooftop-terrace.jpg`, caption: 'Rooftop terrace' },
-      { src: `${SUN}/swimming-pool.jpg`, caption: 'Swimming pool' },
-      { src: `${SUN}/terrace-walk.jpg`, caption: 'Terrace walk' },
-      { src: `${SUN}/gymnasium.jpg`, caption: 'Gymnasium' },
-      { src: `${SUN}/yoga-room.jpg`, caption: 'Yoga room' },
-      { src: `${SUN}/community-hall.jpg`, caption: 'Community hall' },
-      { src: `${SUN}/indoor-games.jpg`, caption: 'Indoor games room' },
-      { src: `${SUN}/living-room.jpg`, caption: 'Living room' },
-      { src: `${SUN}/bedroom.jpg`, caption: 'Bedroom' },
+      { src: `${SUN}/entrance-arrival.webp`, caption: 'Arrival court' },
+      { src: `${SUN}/exterior-day.webp`, caption: 'Street elevation' },
+      { src: `${SUN}/aerial-twilight.webp`, caption: 'Aerial view' },
+      { src: `${SUN}/podium-courtyard.webp`, caption: 'Podium courtyard' },
+      { src: `${SUN}/kids-play.webp`, caption: 'Children’s play area' },
+      { src: `${SUN}/balcony-view.webp`, caption: 'The outdoor room' },
+      { src: `${SUN}/rooftop-terrace.webp`, caption: 'Rooftop terrace' },
+      { src: `${SUN}/swimming-pool.webp`, caption: 'Swimming pool' },
+      { src: `${SUN}/terrace-walk.webp`, caption: 'Terrace walk' },
+      { src: `${SUN}/gymnasium.webp`, caption: 'Gymnasium' },
+      { src: `${SUN}/yoga-room.webp`, caption: 'Yoga room' },
+      { src: `${SUN}/community-hall.webp`, caption: 'Community hall' },
+      { src: `${SUN}/indoor-games.webp`, caption: 'Indoor games room' },
+      { src: `${SUN}/living-room.webp`, caption: 'Living room' },
+      { src: `${SUN}/bedroom.webp`, caption: 'Bedroom' },
     ],
 
     plans: [
-      { src: `${SUN}/top-plan-view.jpg`, caption: 'Site plan — top view', note: 'Whole site' },
-      { src: `${SUN}/plan-typical-floor.jpg`, caption: 'Block A & B — typical floor', note: '1st to 8th' },
-      { src: `${SUN}/plan-block-a.jpg`, caption: 'Block A — unit plans', note: 'Typical' },
-      { src: `${SUN}/plan-block-b.jpg`, caption: 'Block B — unit plans', note: 'Typical' },
-      { src: `${SUN}/plan-block-c.jpg`, caption: 'Block C — unit plans', note: 'Typical' },
+      { src: `${SUN}/top-plan-view.webp`, caption: 'Site plan, top view', note: 'Whole site' },
+      { src: `${SUN}/plan-typical-floor.webp`, caption: 'Block A & B typical floor', note: '1st to 8th' },
+      { src: `${SUN}/plan-block-a.webp`, caption: 'Block A unit plans', note: 'Typical' },
+      { src: `${SUN}/plan-block-b.webp`, caption: 'Block B unit plans', note: 'Typical' },
+      { src: `${SUN}/plan-block-c.webp`, caption: 'Block C unit plans', note: 'Typical' },
     ],
 
     specification: [
@@ -181,7 +181,7 @@ export const PROJECTS = [
       },
       {
         k: 'Doors',
-        v: ['Wood frame with waterproof flush door — veneer finish at the main door, laminate finish elsewhere'],
+        v: ['Wood frame with waterproof flush door, veneer finish at the main door and laminate finish elsewhere'],
       },
       { k: 'Windows', v: ['Aluminium sliding windows with mosquito net'] },
       {
@@ -225,8 +225,8 @@ export const PROJECTS = [
     brochure: null,
 
     partners: [
-      ['Architect', 'Stellar Design Studio — a multidisciplinary architecture and interior practice founded in 2014.'],
-      ['Brand consultant', 'Be the Bee — brand and communication for the project.'],
+      ['Architect', 'Stellar Design Studio, a multidisciplinary architecture and interior practice founded in 2014.'],
+      ['Brand consultant', 'Be the Bee, brand and communication for the project.'],
     ],
   },
 
@@ -243,13 +243,13 @@ export const PROJECTS = [
     kicker: "Raipur's first ultra-premium corporate hub",
 
     cover: `${STC}/VIEW_001_ELEVATION_TWILIGHT_2025.01.15_HIRES_FINAL.webp`,
-    coverAlt: 'Sumeet Trade Centre — the three towers at twilight',
+    coverAlt: 'Sumeet Trade Centre, the three towers at twilight',
     hero: `${STC}/VIEW_002_ELEVATION_DUSK_2025.01.15_HIRES_FINAL.webp`,
     heroAlt: 'Sumeet Trade Centre elevation at dusk',
 
     blurb: 'Three towers of glass-fronted offices and shopfronts at Raipur’s busiest commercial junction.',
     tagline:
-      'An address that introduces you before you do. Three towers at Pachpedi Naka Chowk, planned around a landscaped plaza — offices above, shopfronts at the street, and a terrace that gives the working day somewhere to go.',
+      'An address that introduces you before you do. Three towers at Pachpedi Naka Chowk, planned around a landscaped plaza. Offices above, shopfronts at the street, and a terrace that gives the working day somewhere to go.',
 
     price: 'Price on request',
     priceUnit: 'Offices & retail',
@@ -267,14 +267,14 @@ export const PROJECTS = [
     ],
 
     quote: {
-      text: 'Raipur’s first ultra-premium corporate hub — built on quality construction, modern amenities and a location that gives businesses seamless connectivity and lasting value.',
+      text: 'Raipur’s first ultra-premium corporate hub, built on quality construction, modern amenities and a location that gives businesses seamless connectivity and lasting value.',
       by: 'Sumeet Infracon',
     },
 
     highlights: [
       [
         'The junction',
-        'Pachpedi Naka Chowk is where Raipur’s commercial traffic already converges — the footfall arrives before you open.',
+        'Pachpedi Naka Chowk is where Raipur’s commercial traffic already converges. The footfall arrives before you open.',
       ],
       [
         'Glass and shade',
@@ -318,7 +318,7 @@ export const PROJECTS = [
     connectivity: {
       eyebrow: 'The address',
       title: 'At the centre of gravity, by <em>design</em>.',
-      lede: 'Pachpedi Naka Chowk sits where the city’s arterial roads meet — which is exactly why a commercial address belongs here.',
+      lede: 'Pachpedi Naka Chowk sits where the city’s arterial roads meet, which is exactly why a commercial address belongs here.',
       places: [
         { place: 'Pachpedi Naka Chowk', dist: 'At the door' },
         { place: 'Civil Lines', dist: '3 km' },
@@ -371,16 +371,32 @@ export const PROJECTS = [
 ]
 
 /** Past deliveries named in the Sumeet Urban Nest brochure's developer note. */
+/**
+ * Delivered and handed over. These have no brochure and no detail page, so
+ * they carry a photograph and a line rather than specs, and they point at
+ * the portfolio page instead of a project route.
+ *
+ * `coverPosition` matters here in a way it does not for the renders above:
+ * both photographs are wide (16:9 and a 2.2:1 panorama) and the home page
+ * crops them into portrait cards, so the framing is set per image rather
+ * than left at centre — which would hold nothing but sky.
+ */
 export const PAST_PROJECTS = [
   {
     name: 'Sumeet City of Dreams',
     category: 'Residential',
     note: 'A residential development that set the group’s benchmark for planning and finish.',
+    cover: '/Assets/Sumeet City Of Dreams/sumeet_city_of_dreams.webp',
+    coverAlt: 'The completed towers at Sumeet City of Dreams',
+    coverPosition: '52% 50%',
   },
   {
     name: 'Sumeet Landscape',
     category: 'Plotted',
     note: 'Plotted land with wide roads and underground services, sold on clear title.',
+    cover: '/Assets/Sumeet Landscape/SumeetLandscape_img.webp',
+    coverAlt: 'The entrance avenue and signage at Sumeet Landscape',
+    coverPosition: '26% 50%',
   },
 ]
 

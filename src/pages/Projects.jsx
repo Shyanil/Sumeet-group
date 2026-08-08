@@ -19,7 +19,7 @@ export default function Projects() {
           <Eyebrow rule>Portfolio</Eyebrow>
           <h1 className="sg-display h-page">Projects in Raipur</h1>
           <p className="lede">
-            Homes at Khamardih and a commercial centre at Pachpedi Naka — with two more delivered before them. Every
+            Homes at Khamardih and a commercial centre at Pachpedi Naka, with two more delivered before them. Every
             project RERA registered.
           </p>
         </div>
@@ -59,7 +59,7 @@ export default function Projects() {
             <Eyebrow rule>Delivered</Eyebrow>
             <h2 className="sg-display h-section">Built before this one.</h2>
             <p className="lede">
-              The record behind the two projects above — the reason people who bought from us once tend to come back.
+              The record behind the two projects above, and the reason people who bought from us once tend to come back.
             </p>
           </Reveal>
 

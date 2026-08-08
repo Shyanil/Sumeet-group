@@ -1,0 +1,147 @@
+/* ============================================================
+   Real-estate arrows — an editorial statement band.
+
+   Co-located with its component rather than living in styles/, because
+   the section is meant to be liftable into another page as one unit.
+   It reads the design system's tokens but owns no globals.
+   ============================================================ */
+
+.real-estate-arrows {
+  background: var(--color-surface, #fff);
+  padding: clamp(2.75rem, 1.8rem + 3.6vw, 4.5rem) 20px;
+}
+
+/* The content already stacks to roughly 720px on a desktop viewport; the
+   floor is here so a short heading or a swapped-in paragraph cannot make
+   the band collapse. Desktop only — on a phone it would be dead space. */
+@media (min-width: 1024px) {
+  .real-estate-arrows { min-height: 560px; }
+}
+
+.real-estate-arrows__container {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* ---------- 1 · heading -------------------------------------- */
+.real-estate-arrows__header {
+  text-align: center;
+}
+
+.real-estate-arrows__heading {
+  margin: 0;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 600;
+  font-size: clamp(2.125rem, 1.1rem + 2.6vw, 3.5rem);   /* 34 → 56px */
+  line-height: 1.04;
+  letter-spacing: -0.028em;
+  color: var(--ink-950, #191a1f);
+  text-wrap: balance;
+}
+
+/* The second half closes in gold. It is one sentence, so it stays one
+   heading; the span only carries colour. --gold-700 is the one step of the
+   scale that clears 4.5:1 on paper. */
+.real-estate-arrows__heading span {
+  color: var(--gold-700, #946730);
+}
+
+/* Desktop holds it on a single line; below that it is allowed to wrap. */
+@media (min-width: 1024px) {
+  .real-estate-arrows__heading {
+    white-space: nowrap;
+  }
+}
+
+/* ---------- 2 · the chevrons --------------------------------- *
+   Three numbers drive the whole composition.
+
+   --arrow-overlap is how far each box is pulled back over the one before
+   it. The boxes overlap; the *shapes* do not, because the left edge of
+   every arrow is a notch and the right edge is a point. That is where the
+   white between them comes from — geometry, not gaps.
+
+   At the desktop ceiling: 4 × 250px − 3 × 45px = 865px across. */
+.real-estate-arrows__visuals {
+  margin-top: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+}
+
+.real-estate-arrows__row {
+  --arrow-w: clamp(78px, 22vw, 250px);
+  --arrow-h: clamp(120px, 34vw, 310px);
+  --arrow-overlap: calc(var(--arrow-w) * 0.18);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.real-estate-arrows__arrow {
+  position: relative;
+  flex: none;
+  width: var(--arrow-w);
+  height: var(--arrow-h);
+  overflow: hidden;
+
+  /* Thick right-facing chevron: square top and bottom, a point pushed out
+     to the right edge, and a V notched back into the left. Tune 56%/45%
+     together — the gap between neighbours is the difference between them. */
+  clip-path: polygon(0% 0%, 56% 0%, 100% 50%, 56% 100%, 0% 100%, 45% 50%);
+}
+
+.real-estate-arrows__arrow + .real-estate-arrows__arrow {
+  margin-left: calc(-1 * var(--arrow-overlap));
+}
+
+.real-estate-arrows__arrow img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* ---------- 3 · closing copy --------------------------------- */
+.real-estate-arrows__copy {
+  margin-top: clamp(2rem, 1.4rem + 2.2vw, 3rem);
+  text-align: center;
+}
+
+.real-estate-arrows__copy p {
+  max-width: 660px;
+  margin-inline: auto;
+  font-family: var(--font-sans, system-ui, sans-serif);
+  font-weight: 500;
+  font-size: clamp(1.0625rem, 0.9rem + 0.45vw, 1.4375rem);   /* 17 → 23px */
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  color: var(--ink-950, #191a1f);
+  text-wrap: pretty;
+}
+
+.real-estate-arrows__copy p span {
+  color: var(--ink-400, #a7a9b3);
+}
+
+/* ---------- Responsive --------------------------------------- *
+   The arrow row needs no breakpoints — its clamps already carry it from
+   78px to 250px per arrow, and 22vw keeps four of them plus their overlap
+   inside any viewport. Only the surrounding rhythm tightens up. */
+@media (max-width: 768px) {
+  .real-estate-arrows {
+    padding: 48px 16px 56px;
+  }
+  .real-estate-arrows__visuals { margin-top: 36px; }
+  .real-estate-arrows__copy { margin-top: 34px; }
+}
+
+/* ---------- Reduced motion ----------------------------------- *
+   The component skips its GSAP context entirely under this preference, so
+   there is nothing to unwind — this only guards the transition properties
+   in case the section is ever animated from CSS instead. */
+@media (prefers-reduced-motion: reduce) {
+  .real-estate-arrows__arrow {
+    transition: none;
+    animation: none;
+  }
+}

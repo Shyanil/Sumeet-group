@@ -15,7 +15,7 @@ const VALUES = [
   ],
   [
     'One promise, one person',
-    'A single point of contact from your first site visit through handover — and long after the keys change hands.',
+    'A single point of contact from your first site visit through handover, and long after the keys change hands.',
   ],
   [
     'Of this city',
@@ -33,7 +33,7 @@ export default function About() {
             Build spaces that add <em>value</em> to how people live and work.
           </h1>
           <p className="lede" style={{ fontSize: '1.1875rem' }}>
-            {BRAND.legal} is a Raipur-based developer with a foothold across Chhattisgarh’s property landscape — known
+            {BRAND.legal} is a Raipur-based developer with a foothold across Chhattisgarh’s property landscape, known
             for quality construction, modern amenities, and locations chosen for how they serve a working day rather
             than how they read on a map.
           </p>
@@ -58,7 +58,7 @@ export default function About() {
 
           <Reveal className="quote">
             <p className="quote__text">
-              “Our journey has always been guided by a simple belief — build spaces that truly add value to the way
+              “Our journey has always been guided by a simple belief: build spaces that truly add value to the way
               people live and work. With Sumeet Urban Nest we continue that approach while taking a step forward in
               planning. The BOHK home lets us create spaces that are more usable, more flexible and better aligned with
               modern living.”

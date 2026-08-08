@@ -1,0 +1,148 @@
+/* ============================================================
+   How we build — an accordion.
+
+   Co-located with its component. Reads the design system's tokens and
+   owns no globals.
+   ============================================================ */
+
+.faq {
+  border-top: 1px solid var(--color-line-strong);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--color-line-strong);
+}
+
+/* The heading is the landmark; the button inside it is the control. Both
+   are needed — a bare <button> would leave the list unnavigable by heading,
+   and a bare <h3> would leave it unreachable by keyboard. */
+.faq__h { margin: 0; font: inherit; }
+
+.faq__trigger {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.875rem, 2vw, 1.5rem);
+  width: 100%;
+  box-sizing: border-box;
+  /* 24px block padding either side of a ~26px line clears 44px comfortably. */
+  padding: clamp(1.125rem, 2vw, 1.5rem) 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-strong);
+  transition: color var(--duration-base) var(--ease-out);
+}
+
+.faq__trigger:hover { color: var(--color-gold-deep); }
+.faq__trigger:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
+.faq__n {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--gold-600);
+  /* Fixed width so every title starts on the same axis whatever the
+     numeral — the list reads as a column, not a ragged edge. */
+  width: 2ch;
+}
+
+.faq__t {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.375rem);   /* 17 → 22 */
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+.faq__icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--color-line-strong);
+  color: var(--text-soft);
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    background var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+.faq__icon svg { width: 17px; height: 17px; display: block; }
+
+.faq__trigger:hover .faq__icon {
+  border-color: var(--color-gold-line);
+  color: var(--color-gold-deep);
+}
+
+.faq__item.is-open .faq__icon {
+  background: var(--ink-900);
+  border-color: var(--ink-900);
+  color: var(--sand-50);
+}
+
+/* Plus to minus: the upright scales to nothing about its own centre. */
+.faq__icon-v {
+  transform-origin: 10px 10px;
+  transition: transform var(--duration-slow) var(--ease-out), opacity var(--duration-base) var(--ease-out);
+}
+.faq__item.is-open .faq__icon-v { transform: scaleY(0); opacity: 0; }
+
+/* ---------- the panel ---------------------------------------- *
+   0fr → 1fr is the whole trick: the row resolves to the content's height
+   without anything measuring it, and unlike max-height it never overshoots
+   or lags on a long answer. */
+
+.faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-slow) var(--ease-out);
+}
+
+.faq__panel-clip {
+  overflow: hidden;
+  /* Not just clipped — hidden. `visibility` is what takes the closed text
+     out of the accessibility tree, and it is delayed by the length of the
+     transition so the copy does not vanish mid-collapse. */
+  visibility: hidden;
+  transition: visibility 0s var(--duration-slow);
+}
+
+.faq__item.is-open .faq__panel { grid-template-rows: 1fr; }
+.faq__item.is-open .faq__panel-clip { visibility: visible; transition-delay: 0s; }
+
+.faq__d {
+  margin: 0;
+  padding: 0 0 clamp(1.375rem, 2.4vw, 2rem) calc(2ch + clamp(0.875rem, 2vw, 1.5rem));
+  max-width: 62ch;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--text-soft);
+  text-wrap: pretty;
+}
+
+/* On a phone the answer gives back the number's indent — 62ch of measure
+   matters more than the column. */
+@media (max-width: 560px) {
+  .faq__d { padding-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__panel,
+  .faq__panel-clip,
+  .faq__icon,
+  .faq__icon-v,
+  .faq__trigger { transition: none; }
+}

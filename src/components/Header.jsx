@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useRouter } from '../lib/router'
 import { NAV, CONTACT } from '../data/site'
 import BrandLockup from './BrandLockup'
@@ -7,9 +7,56 @@ import { Button, Menu, Close } from './ui'
 /** A project detail route should still light up "Projects" in the nav. */
 const isActive = (path, to) => (to === '/' ? path === '/' : path === to || path.startsWith(`${to}/`))
 
+/** Past this, the header is no longer "at the top" and may hide itself. */
+const REVEAL_FLOOR = 90
+/** Ignore the jitter a trackpad produces when a finger rests on it. */
+const DEAD_ZONE = 6
+
+/**
+ * Hide the bar on the way down, bring it back the moment the reader turns
+ * around. Lenis lerps the *native* scroll position, so plain scroll events
+ * are still the truth here and there is nothing to subscribe to on Lenis.
+ */
+function useScrollDirection(disabled) {
+  const [hidden, setHidden] = useState(false)
+  const last = useRef(0)
+
+  useEffect(() => {
+    if (disabled) {
+      setHidden(false)
+      return undefined
+    }
+
+    last.current = window.scrollY
+
+    // No rAF throttle: the handler reads scrollY and compares two numbers,
+    // which costs nothing and never invalidates layout, and deferring it to
+    // the next frame only makes the bar lag the finger by a frame.
+    const onScroll = () => {
+      const y = window.scrollY
+      const delta = y - last.current
+
+      // The top of the page always shows the bar — that is where it is
+      // transparent over the hero, and hiding it there would be a flicker.
+      if (y <= REVEAL_FLOOR) setHidden(false)
+      else if (delta > DEAD_ZONE) setHidden(true)
+      else if (delta < -DEAD_ZONE) setHidden(false)
+
+      if (Math.abs(delta) > DEAD_ZONE) last.current = y
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [disabled])
+
+  return hidden
+}
+
 export default function Header() {
   const { path } = useRouter()
   const [open, setOpen] = useState(false)
+  // A bar that slid away under an open drawer would strand the close button.
+  const hidden = useScrollDirection(open)
 
   // Close the drawer whenever the route changes, and lock the page behind it.
   useEffect(() => setOpen(false), [path])
@@ -28,7 +75,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="site-header">
+      <header className={`site-header${hidden ? ' is-hidden' : ''}`}>
         <div className="wrap site-header__inner">
           <BrandLockup />
 

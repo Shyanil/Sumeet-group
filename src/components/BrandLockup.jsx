@@ -11,7 +11,7 @@ export default function BrandLockup({ reversed = false, onNavigate }) {
       to="/"
       className={`brand-lockup${reversed ? ' brand-lockup--reversed' : ''}`}
       onNavigate={onNavigate}
-      aria-label={`${BRAND.name} — home`}
+      aria-label={`${BRAND.name} home`}
     >
       <img className="brand-lockup__mark" src={LOGO.mark} alt="" width="48" height="38" />
       <span className="brand-lockup__text">

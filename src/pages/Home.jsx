@@ -1,15 +1,22 @@
 import { Link } from '../lib/router'
-import { GROUP_STATS, CONTACT } from '../data/site'
-import { PROJECTS } from '../data/projects'
-import { Button, Eyebrow, Stat, ArrowRight } from '../components/ui'
-import ProjectCard from '../components/ProjectCard'
+import { GROUP_STATS } from '../data/site'
+import { PROJECTS, PAST_PROJECTS } from '../data/projects'
+import { Eyebrow, Stat, ArrowRight } from '../components/ui'
 import Reveal from '../components/Reveal'
+import HeroCinema from '../components/HeroCinema'
+import WordReveal from '../components/WordReveal'
+import ParallaxMedia from '../components/ParallaxMedia'
+import RealEstateArrowsSection from '../components/RealEstateArrowsSection'
+import ServicesSection from '../components/ServicesSection'
+import ProjectShowcase from '../components/ProjectShowcase'
+import TestimonialsSection from '../components/TestimonialsSection'
+import ApproachAccordion from '../components/ApproachAccordion'
 
 const APPROACH = [
   [
     '01',
     'Bones before beauty',
-    'Structures engineered to code and finished as if our own names were on the doorbell — the strength you’ll never see, holding up everything you will.',
+    'Structures engineered to code and finished as if our own names were on the doorbell. The strength you’ll never see, holding up everything you will.',
   ],
   [
     '02',
@@ -29,111 +36,91 @@ const APPROACH = [
 ]
 
 export default function Home() {
-  const featured = PROJECTS[0]
-
   return (
     <>
-      {/* ---------- Hero ---------- */}
-      <section className="wrap section">
-        <div className="hero">
-          <Reveal>
-            <Eyebrow rule>Real estate · Raipur</Eyebrow>
-            <h1 className="sg-display h-hero" style={{ marginTop: 'var(--space-5)' }}>
-              Built for the life
-              <br />
-              you’ve <em>earned</em>.
-            </h1>
-            <p className="lede" style={{ marginTop: 'var(--space-5)', maxWidth: '36ch' }}>
-              Homes and workspaces across Raipur — made with the kind of care you can feel the moment you walk in.
-            </p>
-            <div className="hero__actions">
-              <Link to="/projects" className="sg-btn sg-btn--primary sg-btn--lg">
-                <span>Explore projects</span>
-              </Link>
-              <Button variant="outline" size="lg" href={CONTACT.phoneHref}>
-                Book a site visit
-              </Button>
-            </div>
-          </Reveal>
+      {/* ---------- The scene ---------- */}
+      <HeroCinema />
 
-          <Reveal className="hero__media" delay={80}>
-            <img src={featured.hero} alt={featured.heroAlt} fetchPriority="high" />
-            <span className="media-caption">
-              {featured.name} · {featured.locality}
-            </span>
-          </Reveal>
+      {/* ---------- Statement ----------
+          This sheet is what ends the hero: it rides up over the last stretch
+          of the scene's scroll (--cinema-overlap). Because it covers the
+          still-pinned stage, it has to claim the header tone back for itself
+          — otherwise the header would stay reversed over white paper. */}
+      <section className="statement" data-header-over="paper">
+        <div className="wrap statement__body">
+          <Eyebrow rule>Sumeet Group</Eyebrow>
+          <WordReveal
+            as="h2"
+            className="sg-display statement__line"
+            text="We have built in Raipur long enough to know an address is made of small decisions, the ones nobody sees, taken years before anyone *moves* *in.*"
+          />
         </div>
-      </section>
 
-      {/* ---------- Numbers ---------- */}
-      <section className="section--ink">
         <div className="wrap numbers-band">
           {GROUP_STATS.map((s) => (
-            <Stat key={s.label} tone="ondark" value={s.value} label={s.label} sub={s.sub} />
+            <Stat key={s.label} value={s.value} label={s.label} sub={s.sub} />
           ))}
         </div>
       </section>
 
+      {/* ---------- Statement band ---------- */}
+      <RealEstateArrowsSection />
+
+      {/* ---------- Services ---------- */}
+      <ServicesSection />
+
       {/* ---------- Projects ---------- */}
-      <section className="wrap section">
-        <Reveal className="section-head--split">
-          <div className="section-head">
-            <Eyebrow rule>Now selling</Eyebrow>
-            <h2 className="sg-display h-section">Begin with the right address.</h2>
-          </div>
-          <Link to="/projects" className="sg-btn sg-btn--ghost sg-btn--md">
-            <span>View all</span>
+      <ProjectShowcase selling={PROJECTS} delivered={PAST_PROJECTS} />
+
+      {/* ---------- Full-bleed band ----------
+          The hero's language at page scale: one image, moving slower than
+          the copy laid over it. */}
+      <section className="band">
+        <ParallaxMedia
+          className="band__media"
+          src="/Assets/3D Images/VIEW_006_FRONT_PLAZA_DUSK_2025.01.15_HIRES_FINAL.webp"
+          alt="The front plaza at Sumeet Trade Centre at dusk"
+          amount={9}
+          scale={1.2}
+        />
+        <div className="band__scrim" aria-hidden="true" />
+        <div className="wrap band__copy">
+          <Eyebrow tone="ondark" rule>
+            Pachpedi Naka
+          </Eyebrow>
+          <WordReveal
+            as="h2"
+            className="sg-display band__title"
+            text="Offices, showrooms and a plaza that stays busy after *six.*"
+          />
+          <Link to="/projects/sumeet-trade-centre" className="sg-btn sg-btn--lg band__cta">
+            <span>See Sumeet Trade Centre</span>
             <span className="sg-btn__icon">
               <ArrowRight />
             </span>
           </Link>
-        </Reveal>
-
-        <div className="project-grid">
-          {PROJECTS.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 80}>
-              <ProjectCard project={p} />
-            </Reveal>
-          ))}
         </div>
       </section>
 
-      {/* ---------- Approach ---------- */}
-      <section className="wrap section">
+      {/* ---------- Client stories ---------- */}
+      <TestimonialsSection />
+
+      {/* ---------- Approach ----------
+          Last section on the page, so it carries the larger bottom rhythm
+          the closing CTA band used to provide. */}
+      <section className="wrap section section--lg">
         <div className="split-intro">
           <Reveal className="section-head">
             <Eyebrow rule>How we build</Eyebrow>
-            <h2 className="sg-display h-section">The quiet marks of a serious building.</h2>
+            <h2 className="sg-display h-section">
+              The quiet marks of a serious <em>building.</em>
+            </h2>
           </Reveal>
 
-          <div className="point-grid">
-            {APPROACH.map(([n, title, copy], i) => (
-              <Reveal key={n} delay={i * 60}>
-                <div className="point__n">{n}</div>
-                <h3 className="point__t">{title}</h3>
-                <p className="point__d">{copy}</p>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal>
+            <ApproachAccordion items={APPROACH} />
+          </Reveal>
         </div>
-      </section>
-
-      {/* ---------- CTA ---------- */}
-      <section className="wrap" style={{ paddingBottom: 'var(--section-y-lg)' }}>
-        <Reveal className="cta-band">
-          <div className="cta-band__inner">
-            <div>
-              <h2 className="cta-band__title">Some things, you have to stand inside.</h2>
-              <p className="cta-band__copy">
-                Walk the floors. Watch the evening light arrive. Bring every question you have — site visits run seven
-                days a week.
-              </p>
-            </div>
-            <Link to="/contact" className="sg-btn sg-btn--secondary sg-btn--lg">
-              <span>Book a site visit</span>
-            </Link>
-          </div>
-        </Reveal>
       </section>
     </>
   )

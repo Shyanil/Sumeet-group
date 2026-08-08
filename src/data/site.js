@@ -16,9 +16,9 @@ export const BRAND = {
 }
 
 export const LOGO = {
-  lockup: '/Assets/Brand/sumeet-group-lockup.png',
-  reversed: '/Assets/Brand/sumeet-group-lockup-reversed.png',
-  mark: '/Assets/Brand/sumeet-group-mark.png',
+  lockup: '/Assets/Brand/sumeet-group-lockup.webp',
+  reversed: '/Assets/Brand/sumeet-group-lockup-reversed.webp',
+  mark: '/Assets/Brand/sumeet-group-mark.webp',
 }
 
 export const CONTACT = {
@@ -28,10 +28,10 @@ export const CONTACT = {
   emailHref: 'mailto:sales@sumeetinfraventurs.com',
   website: 'sumeetinfraventures.com',
   websiteHref: 'https://sumeetinfraventures.com',
-  hours: 'Mon–Sun, 10am–7pm',
+  hours: 'Mon to Sun, 10am to 7pm',
   office: {
     label: 'Corporate office',
-    lines: ['Sumeet Business Park, Pachpedi Naka', 'Raipur (Chhattisgarh) — 492001'],
+    lines: ['Sumeet Business Park, Pachpedi Naka', 'Raipur (Chhattisgarh) 492001'],
     mapHref:
       'https://www.google.com/maps/search/?api=1&query=Sumeet%20Business%20Park%2C%20Pachpedi%20Naka%2C%20Raipur',
   },

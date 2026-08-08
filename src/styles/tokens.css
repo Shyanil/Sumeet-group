@@ -215,6 +215,10 @@
   --container-xl: 78rem;    /* 1248 */
   --gutter: var(--space-5);
 
+  /* The sticky header's height, published so full-bleed heroes can run
+     underneath it rather than starting below it. */
+  --header-h: 72px;
+
   --z-base: 1;
   --z-sticky: 100;
   --z-overlay: 500;
@@ -256,7 +260,17 @@
   --display-section: clamp(1.75rem, 1.2rem + 2.1vw, 2.5rem);   /* 28 → 40 */
   --display-card: clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);     /* 20 → 24 */
 
-  /* Section rhythm — sections breathe at 64–128px */
-  --section-y: clamp(3.5rem, 2rem + 5vw, 6rem);
-  --section-y-lg: clamp(4.5rem, 2.5rem + 6.5vw, 7.5rem);
+  /* Section rhythm. Tightened from 56–120px: at the old values the gap
+     between two sections could reach 250px once both sides' padding was
+     counted, which read as the page having ended. */
+  --section-y: clamp(2.75rem, 1.6rem + 3.4vw, 4.5rem);      /* 44 → 72 */
+  --section-y-lg: clamp(3.5rem, 2rem + 4.4vw, 5.75rem);     /* 56 → 92 */
 }
+
+/* Wide screens — the measure grows with the viewport rather than sitting at
+   1248px with 350px of dead margin either side. Each step keeps the gutters
+   at roughly a tenth of the window. */
+@media (min-width: 1440px) { :root { --container-xl: 84rem; } }   /* 1344 */
+@media (min-width: 1680px) { :root { --container-xl: 92rem; } }   /* 1472 */
+@media (min-width: 1920px) { :root { --container-xl: 100rem; } }  /* 1600 */
+@media (min-width: 2400px) { :root { --container-xl: 114rem; } }  /* 1824 */

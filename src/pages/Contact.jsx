@@ -15,7 +15,7 @@ export default function Contact() {
               Let’s find your <em>address</em>.
             </h1>
             <p className="lede" style={{ marginTop: 'var(--space-4)', maxWidth: '44ch' }}>
-              Come for a coffee at the sales office, or leave your number — we’ll plan a visit around your day, not
+              Come for a coffee at the sales office, or leave your number and we’ll plan a visit around your day, not
               ours. Seven days a week.
             </p>
 
@@ -50,7 +50,7 @@ export default function Contact() {
                 <div className="contact-row__v">
                   {PROJECTS.map((p) => (
                     <span key={p.slug} style={{ display: 'block', marginBottom: 6 }}>
-                      <strong style={{ fontWeight: 600 }}>{p.shortName}</strong> — {p.siteAddress}
+                      <strong style={{ fontWeight: 600 }}>{p.shortName}</strong>, {p.siteAddress}
                     </span>
                   ))}
                 </div>

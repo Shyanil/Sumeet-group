@@ -37,3 +37,10 @@ source-assets/
 # Design-system source bundles (multi-MB, embedded fonts and images)
 Sumeet Design System.html
 Sumeet Group Website UI With Images.html
+
+# Unreferenced image exports pulled out of public/ during the WebP pass:
+# duplicate renders, screenshots and brochure page dumps that nothing links
+# to. Every one of them is already in this repo's history at its old path
+# under public/Assets, so ignoring them here loses nothing and keeps ~8 MB
+# of dead weight out of the deploy and out of future clones.
+assets-unused/

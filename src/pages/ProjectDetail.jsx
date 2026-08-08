@@ -147,7 +147,7 @@ export default function ProjectDetail({ slug }) {
                 Book a visit
               </h2>
               <p style={{ fontSize: 14, color: 'var(--text-soft)', margin: '4px 0 20px' }}>
-                See {project.name} in person — we’ll arrange a time that suits you.
+                See {project.name} in person. We’ll arrange a time that suits you.
               </p>
               <EnquiryForm project={project} compact />
             </Card>
@@ -340,7 +340,7 @@ export default function ProjectDetail({ slug }) {
             <Reveal className="sg-card sg-card--pad-lg" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 'var(--space-4)' }}>
               <h3 className="sg-display h-card">Not sure which one fits?</h3>
               <p style={{ fontSize: 14.5, lineHeight: 1.6, color: 'var(--text-soft)' }}>
-                Tell us how you live or how you work, and we’ll point you at the right one — even if it isn’t ours yet.
+                Tell us how you live or how you work, and we’ll point you at the right one, even if it isn’t ours yet.
               </p>
               <Link to="/contact" className="sg-btn sg-btn--outline sg-btn--md" style={{ alignSelf: 'flex-start' }}>
                 <span>Talk to our team</span>

@@ -1,0 +1,421 @@
+/* ============================================================
+   Client stories — an editorial testimonial section.
+
+   Co-located with its component, like ServicesSection.css and
+   ProjectShowcase.css: it reads the design system's tokens and owns no
+   globals.
+
+   The rules here are mostly about what is absent. No card, no border box,
+   no shadow, no rating, no quotation-mark graphic — the quote is set large
+   enough to be the composition on its own, and everything else is a thin
+   rule and a lot of air.
+
+   Greys are the same scale ProjectShowcase uses, so the two dark sections
+   read as one system.
+   ============================================================ */
+
+.tm {
+  --_bg: #141616;
+  --_grey-1: rgba(255, 255, 255, 0.62);   /* small type — 7.5:1 */
+  --_grey-2: rgba(255, 255, 255, 0.44);   /* the muted heading line — 4.3:1 */
+  --_rule: rgba(255, 255, 255, 0.14);
+
+  position: relative;
+  background: var(--_bg);
+  color: var(--text-on-dark);
+  padding-block: clamp(3rem, 2rem + 4.4vw, 5.5rem);   /* 48 → 88 */
+  overflow-x: clip;
+}
+
+.tm::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 1 · intro ---------------------------------------- *
+   Label hard left, the heading held off the margin so it starts around the
+   middle of the measure — the same two-column opening the Services band
+   uses, so the sections rhyme. */
+
+.tm__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+}
+
+@media (min-width: 1024px) {
+  .tm__intro {
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 2.1fr);
+    align-items: start;
+    column-gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+
+.tm__label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--gold-300);
+  padding-top: 0.6em;   /* optically onto the heading's first baseline */
+}
+
+.tm__intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+}
+
+.tm__heading {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: clamp(2.375rem, 1rem + 7.4vw, 3.5rem);   /* 38 → 56, and ~45 on a phone */
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--sand-50);
+  text-wrap: balance;
+}
+
+/* Gold to close, not grey. See the house rule in ServicesSection.css. */
+.tm__heading span:nth-child(2) { color: var(--gold-300); }
+
+.tm__lede {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--font-sans);
+  font-size: clamp(0.9375rem, 0.88rem + 0.25vw, 1.0625rem);   /* 15 → 17 */
+  line-height: 1.6;
+  color: var(--_grey-1);
+  text-wrap: pretty;
+}
+
+/* ---------- 2 · the featured quote --------------------------- */
+
+.tm__feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  margin-top: clamp(2.5rem, 1.6rem + 3.4vw, 4.25rem);   /* 40 → 68 */
+}
+
+/* The index takes its own narrow column and the quote runs beside it, which
+   is what keeps the composition off-centre. */
+@media (min-width: 900px) {
+  .tm__feature {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: start;
+  }
+  .tm__nav { grid-column: 2; }
+}
+
+.tm__index {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  color: var(--gold-300);
+  padding-top: 0.75em;   /* onto the quote's first baseline */
+}
+
+/* All five quotes occupy the same grid cell, so the row is as tall as the
+   longest of them and stays that height for every swap. A min-height would
+   have had to be guessed per breakpoint and would still have been wrong the
+   moment the copy changed. */
+.tm__stage { display: grid; }
+
+.tm__figure {
+  grid-area: 1 / 1;
+  margin: 0;
+  /* Fills the cell so the client line can be pinned to its foot — see
+     .tm__who. Without this a short quote leaves a hole above the nav. */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  opacity: 0;
+  /* `visibility` rather than opacity alone — it is what takes the four
+     inactive quotes out of the accessibility tree, and it is delayed on the
+     way out so the fade is not cut short. */
+  visibility: hidden;
+  transform: translateY(14px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out),
+    visibility 0s var(--duration-slow);
+  pointer-events: none;
+}
+
+.tm__figure.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 440ms var(--ease-out),
+    transform 440ms var(--ease-out),
+    visibility 0s;
+  pointer-events: auto;
+}
+
+/* The outgoing quote clears upward, so the incoming one rising from below
+   reads as a single movement rather than two passing each other. */
+.tm__figure.is-leaving {
+  opacity: 0;
+  visibility: visible;
+  transform: translateY(-12px);
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+
+.tm__quote { margin: 0; }
+
+.tm__quote p {
+  margin: 0;
+  max-width: 62.5rem;   /* 1000 — the measure the reference holds */
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  /* Sized against the column, not the window: one range for the stacked
+     layout, another once the index takes its own column at 900px. A single
+     clamp wide enough for both hits its ceiling by 1100px and leaves the
+     largest screens with the same 72px as a laptop. */
+  font-size: clamp(2rem, 1rem + 6.4vw, 3rem);   /* 32 → 48 */
+  line-height: 1.04;
+  letter-spacing: -0.032em;
+  color: #fff;
+  text-wrap: pretty;
+}
+
+/* Hanging the opening quote mark into the margin puts the first letter on
+   the same axis as everything else — but only once there is a margin to
+   hang into. Below 900px the index sits above the quote rather than beside
+   it, so the mark would push out into the page gutter. */
+@media (min-width: 900px) {
+  .tm__quote p { text-indent: -0.42em; }
+}
+
+/* Must follow the base rule, not lead it: same specificity, so whichever
+   comes last wins and a media query does not change that. */
+@media (min-width: 900px) {
+  .tm__quote p { font-size: clamp(2.625rem, 0.6rem + 4.4vw, 4.5rem); }   /* 42 → 72 */
+}
+
+/* Pinned to the bottom of the stage, so the name sits on the same axis
+   whichever quote is showing. The slack between a short quote and the name
+   then reads as composition rather than as a gap that moves. */
+.tm__who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: clamp(1.75rem, 1.2rem + 1.6vw, 2.75rem);
+}
+
+.tm__who-text { display: flex; flex-direction: column; gap: 4px; }
+
+.tm__name {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 15px;
+  color: var(--sand-50);
+}
+
+.tm__role {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  color: var(--_grey-1);
+}
+
+/* ---------- navigation --------------------------------------- */
+
+.tm__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  /* The stage already ends on the client line, so this is the only gap. */
+  margin-top: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+}
+
+@media (min-width: 900px) {
+  /* Bottom-right, as a footnote to the quote rather than a control bar. */
+  .tm__nav { justify-content: flex-end; gap: clamp(2rem, 4vw, 3.5rem); }
+}
+
+.tm__count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  color: var(--_grey-1);
+  font-variant-numeric: tabular-nums;
+}
+.tm__count-now { color: var(--sand-50); }
+.tm__count-sep { color: rgba(255, 255, 255, 0.45); }
+
+.tm__arrows { display: inline-flex; align-items: center; gap: var(--space-2); }
+
+/* Line arrows, not circular buttons — but still a 44px target, which comes
+   from padding around the glyph rather than from a visible box. */
+.tm__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  transition:
+    color var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+.tm__arrow svg { width: 28px; height: 16px; display: block; }
+
+.tm__arrow:hover { color: #fff; }
+.tm__arrow:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; color: #fff; }
+
+@media (hover: hover) {
+  .tm__arrows .tm__arrow:first-child:hover { transform: translateX(-4px); }
+  .tm__arrows .tm__arrow:last-child:hover { transform: translateX(4px); }
+}
+
+/* ---------- 3 · what's next ---------------------------------- */
+
+.tm__list {
+  margin-top: clamp(2.5rem, 1.6rem + 3.2vw, 4rem);   /* 40 → 64 */
+  border-bottom: 1px solid var(--_rule);
+}
+
+.tm__row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  grid-template-areas:
+    'n quote'
+    '. who';
+  align-items: start;
+  gap: var(--space-3) var(--space-4);
+  width: 100%;
+  box-sizing: border-box;
+  padding-block: clamp(1.5rem, 1rem + 1.6vw, 2.25rem);
+  border: 0;
+  border-top: 1px solid var(--_rule);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  transition: border-color var(--duration-slow) var(--ease-out);
+}
+
+@media (min-width: 900px) {
+  .tm__row {
+    grid-template-columns: 4rem minmax(0, 1fr) minmax(0, 15rem) 2.5rem;
+    grid-template-areas: 'n quote who go';
+    align-items: center;
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+  }
+}
+
+.tm__row:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: -4px;
+  border-radius: var(--radius-xs);
+}
+
+.tm__row-n {
+  grid-area: n;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  /* 0.52, not 0.4 — at 12px this has to clear 4.5:1, and 0.4 lands at 3.8. */
+  color: rgba(255, 255, 255, 0.52);
+  transition: color var(--duration-slow) var(--ease-out);
+}
+
+.tm__row-quote {
+  grid-area: quote;
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.92rem + 0.4vw, 1.25rem);   /* 16 → 20 */
+  line-height: 1.4;
+  letter-spacing: -0.014em;
+  color: rgba(255, 255, 255, 0.72);
+  text-wrap: pretty;
+  transition: color var(--duration-slow) var(--ease-out);
+  /* Two lines: this is a preview, and the full quote is one click away. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.tm__row-who {
+  grid-area: who;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.tm__row-go {
+  grid-area: go;
+  display: none;
+  color: rgba(255, 255, 255, 0.34);
+  transition:
+    transform var(--duration-slow) var(--ease-out),
+    color var(--duration-slow) var(--ease-out);
+}
+.tm__row-go svg { width: 26px; height: 15px; display: block; }
+
+@media (min-width: 900px) {
+  .tm__row-go { display: inline-flex; justify-content: flex-end; }
+}
+
+/* Pointer only: a touch device fires :hover on tap and would leave a row
+   stuck bright after the quote above it had already changed. */
+@media (hover: hover) {
+  .tm__row:hover { border-top-color: rgba(255, 255, 255, 0.3); }
+  .tm__row:hover .tm__row-quote { color: #fff; }
+  .tm__row:hover .tm__row-n { color: var(--gold-300); }
+  .tm__row:hover .tm__row-go { color: #fff; transform: translateX(6px); }
+}
+
+/* ---------- portraits (only if real ones exist) -------------- *
+   Rendered small and square, never as an oversized circular avatar. The
+   component omits the element entirely when `portrait` is absent, which is
+   the default — see the note in src/data/testimonials.js. */
+
+.tm__portrait {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius-xs);
+  flex: none;
+}
+
+/* ---------- reduced motion ----------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .tm__figure { transition: none; transform: none; }
+  .tm__figure.is-active { transition: none; transform: none; }
+  .tm__figure.is-leaving { transition: none; transform: none; }
+  .tm__arrow,
+  .tm__row,
+  .tm__row-n,
+  .tm__row-quote,
+  .tm__row-go { transition: none; }
+  .tm__arrow:hover { transform: none; }
+  .tm__row:hover .tm__row-go { transform: none; }
+}

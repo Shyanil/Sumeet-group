@@ -1,0 +1,587 @@
+/* ============================================================
+   Home hero — "the cinema"
+
+   A section three-and-a-bit viewports tall with a sticky scene inside it.
+   Every animated layer is an `inset: 0` box, so GSAP's percentage
+   transforms mean the same thing on every one of them; the artwork inside
+   each box is positioned on its own.
+
+   The stage is `isolation: isolate` so nothing in here blends with the
+   page behind it, and `overflow: clip` so a layer can overhang without
+   creating a scrollbar.
+   ============================================================ */
+
+.cinema {
+  --sky-top: #6FA9D8;
+  --sky-warm: #F7EEE2;
+  /* How much of the scene's own scroll the next section is allowed to climb
+     over. This is what stops the hero ending on a held blank frame: the page
+     arrives *while* the fog is still closing, instead of after it.
+
+     Keep it near 28% of the *pinned travel* (section height − one viewport),
+     which puts the sheet's leading edge at the bottom of the frame around
+     70% through the timeline — after the wordmark has had its moment, so the
+     page climbs over the mark rather than cutting it off. Each breakpoint
+     shortens the section, so each one re-derives its own value below. */
+  --cinema-overlap: 62svh;   /* travel 220vh */
+  position: relative;
+  height: 320vh;
+  background: var(--sky-warm);
+  /* Run up under the sticky header (and its hairline) so the scene owns the
+     whole viewport and the header floats on top of it. */
+  margin-top: calc(-1 * var(--header-h) - 1px);
+  margin-bottom: calc(-1 * var(--cinema-overlap));
+}
+
+.cinema__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 32rem;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--sky-warm);
+}
+
+.cinema__layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* ---------- 0 · sky ----------------------------------------- *
+   Blue overhead falling to a warm band at the horizon: golden hour,
+   built from tokens rather than a bitmap. Inset past the edges so the
+   slow scale-up never exposes a corner. */
+.cinema__sky {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  will-change: transform;
+  background:
+    radial-gradient(126% 58% at 50% 103%, rgba(248, 219, 176, 0.95) 0%, rgba(248, 232, 212, 0.55) 44%, transparent 74%),
+    linear-gradient(180deg, var(--sky-top) 0%, #93C1E4 26%, #BCD9EE 52%, #E3ECF2 74%, var(--sky-warm) 100%);
+}
+
+/* ---------- 1 & 3 · clouds ---------------------------------- */
+.cinema__cloud { z-index: 1; }
+.cinema__cloud svg { position: absolute; display: block; }
+.cinema__cloud--a svg { left: -18%; top: 2%; width: 98%; height: 44%; }
+.cinema__cloud--b svg { right: -22%; top: 18%; width: 106%; height: 40%; }
+.cinema__cloud--c { z-index: 3; }
+.cinema__cloud--c svg { left: -12%; top: 38%; width: 120%; height: 42%; }
+
+/* ---------- 2 · the building -------------------------------- *
+   The frame crops the render to the building and parks its foot below the
+   fold, because a mask can close on three sides but the fourth would show
+   as a hard edge the moment the layer rises.
+
+   `farthest-side` is doing real work: it pins the gradient's radii to the
+   frame's own half-width and half-height, so the falloff is guaranteed to
+   reach zero before the box ends. A percentage radius does not, and that
+   leaves a faint rectangle exactly where the mask runs out of room. */
+.cinema__house {
+  z-index: 2;
+  transform-origin: 50% 82%;
+}
+.cinema__house-frame {
+  position: absolute;
+  left: 50%;
+  bottom: -6svh;
+  width: min(86rem, 132vw);
+  height: 68svh;
+  transform: translateX(-50%);
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(farthest-side at 50% 66%, #000 56%, rgba(0, 0, 0, 0.5) 82%, transparent 99%);
+  mask-image: radial-gradient(farthest-side at 50% 66%, #000 56%, rgba(0, 0, 0, 0.5) 82%, transparent 99%);
+}
+.cinema__house-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 68%;
+}
+
+/* ---------- 4 · the mark ------------------------------------ *
+   Drawn twice in the same place: an outline that arrives over the glass,
+   and a copy filled with the render itself. `background-clip: text` sits
+   on the container, not the two spans, so one continuous image runs
+   through both lines instead of restarting on each. */
+.cinema__mark {
+  z-index: 4;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding-inline: 4vw;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  opacity: 0;
+}
+.cinema__mark span {
+  /* Same display role as .cinema__title — Newsreader at the display weight,
+     on the headline's own tracking. Semibold at this size closed the
+     counters up and thickened under the outline stroke. */
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  letter-spacing: -0.038em;
+  font-optical-sizing: auto;
+  white-space: nowrap;
+  color: transparent;
+}
+.cinema__mark-a {
+  font-size: clamp(3rem, 16.5vw, 14rem);
+  line-height: 0.88;
+}
+/* The second line is the headline's italic flourish, at the mark's scale. */
+.cinema__mark-b {
+  font-style: italic;
+  font-weight: var(--weight-regular);
+  font-size: clamp(1.25rem, 6.6vw, 5.5rem);
+  line-height: 1;
+  margin-top: 0.08em;
+}
+
+.cinema__outline span { -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.92); }
+
+.cinema__filled {
+  /* Above the fog — this is the layer the scene ends on. */
+  z-index: 7;
+  background-image: url('/Assets/Sumeet Urban Nest (SUN)/renders/exterior-day.webp');
+  background-size: 165% auto;
+  background-position: 50% 74%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 8px 26px rgba(25, 26, 31, 0.22));
+}
+
+/* ---------- 5 & 6 · foreground weather ----------------------- */
+.cinema__fog { z-index: 5; }
+.cinema__fog svg { position: absolute; display: block; }
+.cinema__fog--a svg { left: -24%; bottom: -8%; width: 130%; height: 58%; }
+.cinema__fog--b svg { right: -26%; bottom: -16%; width: 136%; height: 50%; }
+
+/* The bank that eventually swallows the scene and hands over to the page. */
+.cinema__fogbank {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -2%;
+  height: 74%;
+  z-index: 6;
+  will-change: transform;
+  /* Warm paper, not #fff — the page it hands over to is sand, and a cool
+     white bank against a warm page shows up as a seam. Stepped through rgba
+     of the same colour so the fade never dips through grey. */
+  background: linear-gradient(
+    to top,
+    rgba(251, 250, 247, 1) 18%,
+    rgba(251, 250, 247, 0.82) 44%,
+    rgba(251, 250, 247, 0.34) 72%,
+    rgba(251, 250, 247, 0) 100%
+  );
+}
+
+/* ---------- 7 · act one -------------------------------------- *
+   The copy reads white, so it carries its own scrim: a soft darkening of
+   the top of the sky that lives *inside* the copy layer and therefore
+   fades out with it in act two. `z-index: -1` keeps it behind the type
+   but still inside the copy's own stacking context, so it never rises
+   above the building or the fog. */
+.cinema__copy {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: clamp(7.5rem, 20vh, 12.5rem);
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+  text-align: center;
+  will-change: transform;
+}
+
+.cinema__copy::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 78%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 26, 40, 0.40) 0%,
+    rgba(16, 26, 40, 0.22) 38%,
+    rgba(16, 26, 40, 0.08) 68%,
+    transparent 100%
+  );
+}
+
+/* Both hero lines hold on a single line at every width. That means no
+   max-width (a ch cap is a wrap instruction) and no lower bound on the
+   font size — the type has to be free to shrink, or a narrow window would
+   overflow and the stage's `overflow: clip` would cut the line in half.
+
+   The vw coefficients are derived from the strings themselves: "For the
+   life you’ve earned" is 26 characters, which in Newsreader at this
+   tracking measures ~11.5em, so 87.5vw of usable width ÷ 11.5em, with
+   ~12% headroom for font-metric variance, lands at 7vw. Shorten the copy
+   and this can go up; lengthen it and this MUST come down. */
+.cinema__title {
+  white-space: nowrap;
+  font-size: min(7vw, 8.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.038em;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(12, 20, 32, 0.34);
+}
+.cinema__title em { color: var(--gold-300); }
+
+/* 35 characters of Hanken Grotesk ≈ 18.9em at 0.54em average advance.
+
+   The two terms answer different questions. The cap is a *proportion*
+   judgement — at 19px this sat at a fifth of the headline and read as a
+   caption; 28px is closer to a quarter and reads as a second voice. It is
+   nowhere near a fitting limit: 28px needs ~490px of the 1344px a 1440
+   window offers.
+
+   The vw term is the real constraint, and it is pinned to the narrowest
+   phone rather than to taste. 320px leaves 280px between the gutters, so
+   4.3vw puts the line at 260px there — about 8% of slack. Raising it is
+   what would clip the line; the cap can go much higher. */
+.cinema__lede {
+  margin-top: var(--space-5);
+  white-space: nowrap;
+  font-size: min(4.3vw, 1.75rem);
+  line-height: var(--leading-snug);
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 14px rgba(12, 20, 32, 0.36);
+}
+
+.cinema__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: var(--space-6);
+  padding: 0.95rem 1.6rem;
+  border-radius: var(--radius-pill);
+  /* The system's action colour — the logo's vermilion tempered to brick.
+     It is the one warm note in a scene of blue sky and white type, and it
+     holds 5.6:1 against white. */
+  background: var(--color-action);
+  color: var(--text-on-action);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 14px 36px -14px rgba(69, 26, 13, 0.72);
+  transition:
+    background var(--duration-base) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+.cinema__cta:hover { background: var(--color-action-hover); transform: translateY(-1px); }
+.cinema__cta:active { background: var(--color-action-press); transform: none; }
+.cinema__cta svg { width: 18px; height: 18px; flex: none; }
+
+/* ---------- 8 · the hem -------------------------------------- *
+   Always on, never animated: the foot of the frame dissolves into the page
+   colour, so the scene never has a hard bottom edge for the next section to
+   butt up against. The turn is no longer a curtain dropped over the scene —
+   the page simply climbs over it. See --cinema-overlap. */
+.cinema__hem {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30svh;
+  z-index: 8;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(251, 250, 247, 0) 0%,
+    rgba(251, 250, 247, 0.7) 62%,
+    rgba(251, 250, 247, 1) 100%
+  );
+}
+
+/* ============================================================
+   Header over full-bleed scenes
+
+   A section declares the tone it needs with `data-header-over`; the shell
+   mirrors the tone of whichever one is currently under the header onto
+   <body>. See useHeaderInversion in App.jsx.
+   ============================================================ */
+/* Sticky, so translating it up hides the bar without taking its box out of
+   the flow — and the hero already runs under it via a negative margin-top,
+   so nothing below moves when it goes. */
+.site-header {
+  transition:
+    transform 420ms var(--ease-out),
+    background var(--duration-slow) var(--ease-out),
+    border-color var(--duration-slow) var(--ease-out);
+}
+
+.site-header.is-hidden { transform: translateY(-100%); }
+
+/* The drawer's own close button lives in the bar. */
+@media (prefers-reduced-motion: reduce) {
+  .site-header { transition: none; }
+}
+.site-header .brand-lockup__name,
+.site-header .brand-lockup__sub,
+.site-header .nav-link,
+.site-header .nav-toggle {
+  transition: color var(--duration-slow) var(--ease-out);
+}
+
+/* Only the hero. Every other section takes the white bar — a dark band is
+   not a reason to reverse the header out, it just makes it harder to read. */
+body[data-header='light'] .site-header {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+/* Transparent means the type has nothing to sit on, so the header brings
+   its own: a short gradient that reaches a little past the bar and dies out.
+   The header is sticky with a z-index, so it is its own stacking context and
+   `z-index: -1` puts the scrim behind the lockup and nav without letting it
+   fall behind the page. */
+body[data-header='light'] .site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: calc(var(--header-h) + 3.5rem);
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(12, 20, 32, 0.42) 0%,
+    rgba(12, 20, 32, 0.18) 52%,
+    transparent 100%
+  );
+}
+
+/* Over the daylight hero the type reverses out white, same as it does over
+   an ink section — a bright sky is still a photograph, not paper. */
+body[data-header='light'] .brand-lockup__name { color: #fff; }
+body[data-header='light'] .brand-lockup__sub { color: rgba(255, 255, 255, 0.66); }
+body[data-header='light'] .nav-link { color: rgba(255, 255, 255, 0.82); }
+body[data-header='light'] .nav-link:hover,
+body[data-header='light'] .nav-link[aria-current='page'] { color: #fff; }
+body[data-header='light'] .nav-toggle { color: #fff; }
+body[data-header='light'] .nav-toggle:hover { background: rgba(255, 255, 255, 0.14); }
+
+body[data-header='light'] .site-header .sg-btn--primary {
+  --_bg: rgba(255, 255, 255, 0.14);
+  --_fg: #fff;
+  --_bd: rgba(255, 255, 255, 0.44);
+  border-radius: var(--radius-pill);
+  padding-inline: 1.15rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+body[data-header='light'] .site-header .sg-btn--primary:hover {
+  --_bg: rgba(255, 255, 255, 0.24);
+  --_bd: rgba(255, 255, 255, 0.7);
+}
+
+/* Over an ink section everything flips. */
+body[data-header='dark'] .brand-lockup__name { color: var(--sand-50); }
+body[data-header='dark'] .brand-lockup__sub { color: rgba(246, 243, 236, 0.58); }
+body[data-header='dark'] .nav-link { color: rgba(246, 243, 236, 0.76); }
+body[data-header='dark'] .nav-link:hover,
+body[data-header='dark'] .nav-link[aria-current='page'] { color: #fff; }
+body[data-header='dark'] .nav-toggle { color: var(--sand-50); }
+body[data-header='dark'] .nav-toggle:hover { background: rgba(251, 250, 247, 0.12); }
+
+body[data-header='dark'] .site-header .sg-btn--primary {
+  border-radius: var(--radius-pill);
+  padding-inline: 1.15rem;
+}
+
+/* ============================================================
+   Responsive
+
+   The scene is sized in viewport units throughout, so the breakpoints
+   only need to re-proportion the building (a very wide render needs to be
+   much wider than the viewport before it reads as a building on a phone)
+   and shorten the scroll — there is less distance to travel.
+   ============================================================ */
+@media (max-width: 1000px) {
+  .cinema { height: 280vh; --cinema-overlap: 50svh; }   /* travel 180vh */
+  .cinema__house-frame { width: 150vw; height: 64svh; bottom: -3svh; }
+  .cinema__mark-a { font-size: 19vw; }
+  .cinema__mark-b { font-size: 7.6vw; }
+}
+
+@media (max-width: 620px) {
+  .cinema { height: 240vh; --cinema-overlap: 40svh; }   /* travel 140vh */
+  .cinema__stage { min-height: 30rem; }
+  .cinema__house-frame { width: 190vw; height: 58svh; bottom: -1svh; }
+  /* Lower than the desktop proportion, not higher. On a phone the frame is
+     tall and narrow, the building sits low in it, and 17vh left the headline
+     crowding the notch with the whole sky empty beneath it. */
+  .cinema__copy { padding-top: clamp(8.5rem, 24vh, 13rem); }
+  /* Looser tracking widens the line by ~0.2em overall, which the 7vw
+     headroom already absorbs. */
+  .cinema__title { letter-spacing: -0.03em; }
+  .cinema__mark span { letter-spacing: -0.03em; }
+  .cinema__outline span { -webkit-text-stroke-width: 1px; }
+}
+
+/* Big screens: everything scales with the window — the building, or the
+   scene reads as a small render floating in a lot of sky, and the supporting
+   type, or it shrinks away under the headline. */
+@media (min-width: 1900px) {
+  .cinema__lede { font-size: 2rem; }
+  .cinema__cta { padding: 1.1rem 2rem; font-size: 1.0625rem; }
+  .cinema__cta svg { width: 20px; height: 20px; }
+}
+@media (min-width: 1500px) {
+  .cinema__house-frame { width: min(104rem, 122vw); height: 78svh; bottom: -8svh; }
+}
+@media (min-width: 2000px) {
+  .cinema__house-frame { width: min(128rem, 118vw); height: 82svh; bottom: -9svh; }
+}
+
+/* Short, wide windows (laptops in landscape) run out of vertical room
+   before they run out of horizontal — pull the type back so the building
+   still has sky above it. */
+@media (max-height: 700px) and (min-width: 1000px) {
+  .cinema__title { font-size: min(4.4vw, 3.75rem); }
+  .cinema__copy { padding-top: clamp(6rem, 15vh, 8rem); }
+  .cinema__house-frame { height: 74svh; }
+}
+
+/* ---------- Reduced motion ----------------------------------- *
+   No scroll rig: the section collapses to a single viewport and holds
+   act one, which is a complete composition on its own. */
+@media (prefers-reduced-motion: reduce) {
+  .cinema { height: auto; margin-bottom: 0; }
+  .cinema__stage { position: relative; height: 100svh; }
+  .cinema__mark { display: none; }
+  .cinema__fogbank { transform: translateY(60%); }
+}
+
+/* ============================================================
+   Page patterns that speak the hero's language
+   ============================================================ */
+
+/* ---------- Scrubbed word reveal ---------------------------- */
+.wr { display: block; text-wrap: pretty; }
+.wr__w { display: inline-block; white-space: pre; }
+
+/* ---------- Parallax media frame ---------------------------- */
+.px-media { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.px-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(var(--px-scale, 1.16));
+  will-change: transform;
+}
+
+/* ---------- Statement --------------------------------------- *
+   The first sheet of the page proper, and the thing that ends the hero.
+   `position: relative` + an opaque background is what lets it paint over
+   the still-pinned scene as the hero's negative bottom margin pulls it up.
+   The top padding is generous on purpose: the sheet's leading edge should
+   arrive as clean paper, with the type following a beat later.
+
+   The bottom padding is not optional. This section used to have no
+   background, so a zero bottom edge was invisible — it simply ran into the
+   page. Now that it paints its own sand, that edge is a real line, and at
+   zero it fell exactly on the baseline of the numbers band with the next
+   section's white starting underneath. --section-y closes the sheet on the
+   design system's own rhythm and roughly balances the 70px the band below
+   opens with. */
+.statement {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg);
+  padding-block: clamp(4rem, 14vh, 9rem) var(--section-y);
+}
+/* No max-width of its own: .wrap already carries --container-xl, the same
+   track the header runs on. Constraining this to --container-lg centred it
+   inside that track, which pulled the label in from under the logo and the
+   text in from under "Book a visit". The gutters have to match the header's
+   or the page reads as two different grids. */
+.statement__body { display: grid; gap: var(--space-5); }
+
+.statement__line {
+  font-size: clamp(1.75rem, 1rem + 3.1vw, 3.125rem);
+  line-height: 1.22;
+  color: var(--ink-900);
+}
+
+/* Label left, statement right — the label flush under the logo, the text
+   running out to the right edge under the header's button. Below this the
+   two columns are too narrow to be worth it and it stacks. */
+@media (min-width: 900px) {
+  .statement__body {
+    grid-template-columns: minmax(7rem, 1fr) minmax(0, 3.4fr);
+    gap: clamp(2rem, 5vw, 5.5rem);
+    align-items: start;
+  }
+  /* Sit the label on the first line's cap height rather than its line box,
+     so the two columns start together instead of the label floating high.
+     Scaled off the viewport, not the label's own 12px em, because what it
+     has to line up with is the headline — and that is what grows. */
+  .statement__body > .sg-eyebrow-c { margin-top: clamp(0.25rem, 0.55vw, 0.9rem); }
+}
+.statement .numbers-band {
+  margin-top: var(--section-y);
+  border-top: 1px solid var(--color-line);
+  padding-block: var(--space-8) 0;
+}
+
+/* ---------- Full-bleed band --------------------------------- */
+.band {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(26rem, 74vh, 42rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ink-950);
+}
+.band__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(9, 14, 22, 0.94) 0%,
+    rgba(9, 14, 22, 0.42) 48%,
+    rgba(9, 14, 22, 0.62) 100%
+  );
+}
+.band__copy {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-block: clamp(3rem, 9vh, 5rem);
+}
+.band__title {
+  margin-top: var(--space-5);
+  max-width: 20ch;
+  font-size: clamp(1.875rem, 1rem + 3.4vw, 3.125rem);
+  color: var(--sand-50);
+}
+.band__title em { color: var(--gold-300); font-style: italic; font-weight: var(--weight-regular); }
+.band__cta {
+  margin-top: var(--space-6);
+  --_bg: rgba(251, 250, 247, 0.06);
+  --_fg: var(--sand-50);
+  --_bd: rgba(251, 250, 247, 0.34);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.band__cta:hover {
+  --_bg: rgba(251, 250, 247, 0.14);
+  --_bd: rgba(251, 250, 247, 0.6);
+}

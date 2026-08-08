@@ -1,0 +1,362 @@
+/* ============================================================
+   Footer.
+
+   The page closes the way it opened. The hero draws the Sumeet mark as an
+   outline and then floods it; here the name is set edge to edge as hollow
+   type and gold pours across it as you arrive. Everything else in the
+   footer is deliberately quiet so that one gesture has the room.
+
+   Co-located with its component. Reads the design system's tokens and owns
+   no globals.
+   ============================================================ */
+
+.fx {
+  --_rule: rgba(255, 255, 255, 0.12);
+  --_soft: rgba(255, 255, 255, 0.62);   /* 7.5:1 on the ground below */
+
+  position: relative;
+  background: var(--ink-950);
+  color: var(--text-on-dark);
+  padding-top: clamp(3rem, 2rem + 4.4vw, 5.5rem);
+  overflow: hidden;
+}
+
+/* ---------- 1 · the ask -------------------------------------- */
+
+.fx__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  padding-bottom: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+  border-bottom: 1px solid var(--_rule);
+}
+
+@media (min-width: 860px) {
+  .fx__top {
+    /* The status card is a fixed-ish object, not a column that shares the
+       measure — the lead takes whatever is left. */
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
+    column-gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+}
+
+.fx__lead { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.fx__label {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--gold-300);
+}
+
+.fx__line {
+  margin: 0;
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  font-size: clamp(1.75rem, 1.1rem + 2.4vw, 2.75rem);   /* 28 → 44 */
+  line-height: 1.08;
+  letter-spacing: -0.024em;
+  color: var(--sand-50);
+  text-wrap: balance;
+}
+
+/* The house rule: the closing words go gold. */
+.fx__line em {
+  font-style: italic;
+  font-weight: var(--weight-regular);
+  color: var(--gold-300);
+}
+
+.fx__reach {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) clamp(1.5rem, 4vw, 3rem);
+  margin-top: var(--space-2);
+}
+
+.fx__reach-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* 44px of target around two short lines of type. */
+  padding-block: 6px;
+  min-height: 44px;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.fx__reach-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--_soft);
+}
+
+.fx__reach-value {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  font-size: clamp(0.9375rem, 0.88rem + 0.3vw, 1.125rem);
+  color: var(--sand-50);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  padding-bottom: 3px;
+  transition: border-color var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+}
+
+.fx__reach-item:hover .fx__reach-value { color: var(--gold-300); border-bottom-color: var(--gold-300); }
+.fx__reach-item:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; border-radius: var(--radius-xs); }
+
+/* ---------- the status card ---------------------------------- *
+   The one thing a footer almost never tells you, and the one thing worth
+   knowing before you dial. Derived from the stated opening hours, read
+   against Asia/Kolkata rather than the visitor's own clock. */
+
+.fx__status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border: 1px solid var(--_rule);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.fx__status-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--_soft);
+}
+.fx__status-state.is-open { color: var(--gold-300); }
+
+.fx__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--ink-500);
+}
+.fx__status-state.is-open .fx__status-dot { background: var(--green-500); }
+
+.fx__status-time {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+}
+
+.fx__status-time time {
+  font-family: var(--font-mono);
+  font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.25rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--sand-50);
+  font-variant-numeric: tabular-nums;
+}
+
+.fx__status-time span {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  color: var(--_soft);
+}
+
+.fx__status-note {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- columns ------------------------------------------ */
+
+.fx__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  padding-block: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
+}
+
+.fx__col { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+
+.fx__col-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--_soft);
+}
+
+.fx__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+
+.fx__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;   /* target, not text box */
+  font-family: var(--font-sans);
+  font-size: 15px;
+  color: var(--sand-50);
+  text-decoration: none;
+  transition: color var(--duration-base) var(--ease-out);
+}
+.fx__link span:first-child {
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color var(--duration-base) var(--ease-out);
+}
+.fx__link:hover { color: var(--gold-300); }
+.fx__link:hover span:first-child { border-bottom-color: currentColor; }
+.fx__link:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; border-radius: var(--radius-xs); }
+
+/* A link that goes to the holding page says so before it is clicked. */
+.fx__soon {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-200);
+  background: rgba(221, 173, 103, 0.14);
+  border: 1px solid rgba(221, 173, 103, 0.3);
+  border-radius: var(--radius-pill);
+  padding: 3px 7px;
+  line-height: 1;
+}
+
+.fx__address {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--font-sans);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--sand-50);
+  text-decoration: none;
+}
+
+.fx__address-go {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-300);
+}
+.fx__address:hover .fx__address-go { text-decoration: underline; }
+.fx__address:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 4px; border-radius: var(--radius-xs); }
+
+.fx__clock {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--_soft);
+}
+.fx__clock time { color: var(--sand-50); font-variant-numeric: tabular-nums; }
+.fx__clock-hours { flex-basis: 100%; color: rgba(255, 255, 255, 0.5); }
+
+.fx__clock-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-500);
+  flex: none;
+}
+
+/* ---------- 3 · the plinth ----------------------------------- *
+   The name set as signage: full bleed, solid, and whole. Nothing is
+   cropped — the descender on the "p" needs its room, and the line-height
+   below is what reserves it.
+
+   It wipes in from the left on arrival. Reveal supplies `.is-visible`, and
+   falls back to the finished state where IntersectionObserver is missing,
+   so a failure here leaves the name shown rather than hidden. */
+
+.fx__plinth {
+  /* Sized off the string: "Sumeet Group" is 12 characters, which in
+     Newsreader at this tracking runs about 6.1em, so 92vw ÷ 6.1 lands at
+     ~15vw. Change the brand string and this has to be re-derived. */
+  font-size: 15vw;
+  padding-inline: clamp(0.75rem, 2vw, 2rem);
+  padding-block: clamp(0.75rem, 2vw, 1.75rem) 0;
+}
+
+@media (min-width: 1600px) {
+  /* Past the container ceiling the name would keep growing with the window
+     and swamp the page. */
+  .fx__plinth { font-size: 14.25rem; }
+}
+
+.fx__plinth-word {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  font-size: 1em;
+  /* Room for the descender. Newsreader's is deep, and 0.86 was eating it. */
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  text-align: center;
+  user-select: none;
+
+  /* Solid, not hollow: light catching the top of the letterform and falling
+     away down the face. It stops at gold-600 rather than fading into the
+     ground, so the whole name stays legible now that none of it is cropped. */
+  background: linear-gradient(
+    180deg,
+    var(--gold-200) 0%,
+    var(--gold-400) 44%,
+    var(--gold-600) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* The wipe. Reveal's own fade is suppressed below so this is the only
+     thing that moves. */
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1100ms var(--ease-out);
+}
+
+/* Reveal fades and lifts by default; here the wipe is the entrance, so the
+   wrapper is pinned and only the crop travels. */
+.fx__plinth.reveal { opacity: 1; transform: none; transition: none; }
+.fx__plinth.is-visible .fx__plinth-word { clip-path: inset(0 0 0 0); }
+
+/* ---------- 4 · the small print ------------------------------ */
+
+.fx__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-4) clamp(1.25rem, 1rem + 1.4vw, 2rem);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--_soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx__reach-value,
+  .fx__link,
+  .fx__link span:first-child { transition: none; }
+  .fx__plinth-word { transition: none; clip-path: inset(0 0 0 0); }
+}
