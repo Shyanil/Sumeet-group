@@ -21,6 +21,9 @@
   --_bg: #141618;
   --_grey-1: rgba(255, 255, 255, 0.62);
   --_grey-2: rgba(255, 255, 255, 0.42);
+  /* Read by the carousel arithmetic as well as by the grid, so it has to be
+     a variable rather than a literal on `gap` — see section 3. */
+  --_gap: clamp(1rem, 0.6rem + 1.2vw, 1.5rem);   /* 16 → 24 */
 
   position: relative;
   background: var(--_bg);
@@ -162,12 +165,32 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
   .portfolio__cta:focus-visible .portfolio__cta-icon { transform: translateX(4px); }
 }
 
-/* ---------- 3 · the grid ------------------------------------- */
+/* ---------- 3 · the cards, and the two ways they sit ---------- *
+
+   Same markup, three layouts:
+
+     < 640    one column
+     640–1023 two columns, two rows
+     1024–1799 a loop of two — the only mode with JavaScript behind it
+     ≥ 1800   the four-up row
+
+   The middle band is the one to hold in your head. .portfolio__stage is a
+   fixed-width window and .portfolio__grid is a flex track that overflows it
+   to the right; the track keeps `width: 100%` precisely so that percentages
+   inside it — both the flex-basis below and the translate — resolve against
+   the *window*, not against its own overflowing content. That is what makes
+   one step (100% + gap) / per-view regardless of how wide a card lands up.
+
+   None of it is guarded behind the media query: the carousel rules are keyed
+   to .is-carousel, which only React adds, so with no JavaScript the section
+   falls back to the grid rather than to a stuck track. */
+
+.portfolio__carousel { position: relative; }
 
 .portfolio__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1rem, 0.6rem + 1.2vw, 1.5rem);   /* 16 → 24 */
+  gap: var(--_gap);
 }
 
 .portfolio__grid > * { min-width: 0; }
@@ -177,9 +200,88 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
 }
 
 /* Four across rather than the reference's three, because the portfolio is
-   four deep. The cards narrow; the row stays one row. */
+   four deep. The cards narrow; the row stays one row. Between 1280 and 1800
+   .is-carousel wins this — display:flex leaves the template unused. */
 @media (min-width: 1280px) {
   .portfolio__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ---------- 3b · the loop of two ----------------------------- */
+
+.is-carousel .portfolio__stage { overflow: hidden; }
+
+.is-carousel .portfolio__grid {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  transform: translateX(calc(var(--pf-slide, 0) * (-100% - var(--_gap)) / var(--pf-per, 2)));
+  transition: transform var(--pf-dur, 720ms) cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+/* The frame in which the track is moved onto its duplicate. */
+.is-carousel .portfolio__grid.is-instant { transition: none; }
+
+.is-carousel .portfolio__slide {
+  flex: 0 0 calc((100% - (var(--pf-per, 2) - 1) * var(--_gap)) / var(--pf-per, 2));
+}
+
+/* ---------- 3c · the controls -------------------------------- */
+
+.portfolio__nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+}
+
+.portfolio__count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  color: var(--_grey-1);
+  font-variant-numeric: tabular-nums;
+}
+.portfolio__count-now { color: var(--sand-50); }
+.portfolio__count-sep { color: rgba(255, 255, 255, 0.45); }
+
+.portfolio__arrows { display: inline-flex; align-items: center; gap: var(--space-3); }
+
+/* Outlined circles rather than the bare line arrows in TestimonialsSection:
+   this band already speaks in pills — the CTA and every card's Learn More —
+   and the controls belong to that vocabulary. */
+.portfolio__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  cursor: pointer;
+  color: #fff;
+  transition:
+    background var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+.portfolio__arrow svg { width: 20px; height: 20px; display: block; }
+
+.portfolio__arrow:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 3px; }
+
+@media (hover: hover) {
+  .portfolio__arrow:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+  .portfolio__arrows .portfolio__arrow:first-child:hover { transform: translateX(-3px); }
+  .portfolio__arrows .portfolio__arrow:last-child:hover { transform: translateX(3px); }
 }
 
 /* ---------- 4 · the card ------------------------------------- */
@@ -224,6 +326,16 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
    ratio no longer gives it. */
 @media (min-width: 1280px) {
   .portfolio__card { min-height: 31rem; }
+}
+
+/* Two across on a laptop puts each card at 460–690px wide, and 3/4 of that is
+   a card taller than the screen it is being read on. So in the loop the ratio
+   gives way to a height: the crop travels from portrait to about square
+   across the band, and the section still clears the fold at 1440×900. */
+.is-carousel .portfolio__card {
+  aspect-ratio: auto;
+  height: clamp(30rem, 21rem + 17vw, 37.5rem);   /* 480 → 600 */
+  min-height: 0;
 }
 
 .portfolio__media {
@@ -384,6 +496,9 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
 
 /* ---------- 6 · reduced motion ------------------------------- */
 
+/* The loop stops entirely here rather than slowing down — the component
+   turns off its own timer too, so the arrows are the only thing that moves
+   the track, and they move it with a cut. */
 @media (prefers-reduced-motion: reduce) {
   .portfolio__media img,
   .portfolio__veil,
@@ -391,9 +506,12 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
   .portfolio__more,
   .portfolio__more-icon,
   .portfolio__cta,
-  .portfolio__cta-icon {
+  .portfolio__cta-icon,
+  .portfolio__arrow,
+  .is-carousel .portfolio__grid {
     transition: none;
   }
+  .portfolio__arrow:hover { transform: none; }
   .portfolio__card:hover .portfolio__media img { transform: scale(1.001); }
   .portfolio__card:hover .portfolio__title { transform: none; }
   .portfolio__card:hover .portfolio__more-icon { transform: none; }
