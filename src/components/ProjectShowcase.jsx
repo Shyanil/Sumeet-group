@@ -25,11 +25,17 @@ const COUNT_WORD = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
  * 1920 desktop lands in the row.
  */
 const CAROUSEL_MQ = '(min-width: 1024px) and (max-width: 1799.98px)'
+
+/**
+ * Cards fully on show, which is also what one press of an arrow moves by.
+ * A sliver of the third is visible as well, but that is a width and belongs
+ * to the stylesheet — see --pf-view in ProjectShowcase.css.
+ */
 const PER_VIEW = 2
 
 /** Dwell between automatic moves, and the length of the move itself. */
-const DWELL_MS = 5200
-const SLIDE_MS = 720
+const DWELL_MS = 2000
+const SLIDE_MS = 560
 
 const pad = (n) => String(n).padStart(2, '0')
 
@@ -113,8 +119,13 @@ function Tile({ card }) {
  *
  * Two layouts, one markup. Below 1024px the cards are a plain stacked grid,
  * and from 1800px up they are the four-up row. Between the two — every
- * laptop — they become a loop of two, which is the only mode with any
- * JavaScript in it.
+ * laptop — they become a loop of two and a sliver of the third, which is the
+ * only mode with any JavaScript in it.
+ *
+ * It moves every two seconds and does not stop for the pointer. That is a
+ * deliberate departure from TestimonialsSection, which never moves unasked:
+ * a quote that slides away mid-sentence is a reading problem, whereas these
+ * are photographs with four words on them.
  *
  * The loop is done with a duplicate of the card list rather than a rewind.
  * Advancing past the last card slides onto the duplicate, which is the same
@@ -169,8 +180,16 @@ export default function ProjectShowcase({ selling = [], delivered = [] }) {
      is the position on the duplicate that the loop lands on. */
   const [slide, setSlide] = useState(0)
   const [instant, setInstant] = useState(false)
-  const [paused, setPaused] = useState(false)
+  /* Keyboard only. Hovering deliberately does not stop the loop — but focus
+     has to, because a card that moves on is made inert a moment later, and
+     that would throw the caret to the top of the document mid-tab. */
+  const [held, setHeld] = useState(false)
   const [onScreen, setOnScreen] = useState(false)
+  /* Counts moves, not positions. The dwell below is keyed to this rather than
+     to `slide`, because `slide` also changes when the loop lands itself back
+     on the head — and re-arming the timer there would hand one pair of the
+     four an extra half-second every time round. */
+  const [tick, setTick] = useState(0)
   const queued = useRef(null)
   const stageRef = useRef(null)
 
@@ -210,6 +229,8 @@ export default function ProjectShowcase({ selling = [], delivered = [] }) {
 
   const step = useCallback(
     (dir) => {
+      setTick((t) => t + 1)
+
       if (dir > 0) {
         /* Already riding out onto the duplicate — land now and carry on,
            rather than swallowing the press for the rest of the move. */
@@ -258,18 +279,24 @@ export default function ProjectShowcase({ selling = [], delivered = [] }) {
     return () => io.disconnect()
   }, [paged])
 
+  /* `step` is rebuilt on every move, so the timer reads it through a ref —
+     otherwise its identity would re-arm the dwell and undo the point of
+     counting ticks. */
+  const stepRef = useRef(step)
   useEffect(() => {
-    if (!paged || reduced || paused || !onScreen) return undefined
-    const id = setTimeout(() => step(1), DWELL_MS)
+    stepRef.current = step
+  })
+
+  useEffect(() => {
+    if (!paged || reduced || held || !onScreen) return undefined
+    const id = setTimeout(() => stepRef.current(1), DWELL_MS)
     return () => clearTimeout(id)
-  }, [paged, reduced, paused, onScreen, slide, step])
+  }, [paged, reduced, held, onScreen, tick])
 
   /* The duplicate only exists in the looping layout; the grid renders the
      four cards it has. */
   const track = paged ? [...cards, ...cards] : cards
   const Stage = paged ? Reveal : 'div'
-  const hold = () => setPaused(true)
-  const release = () => setPaused(false)
 
   return (
     <section className="portfolio" aria-labelledby="portfolio-heading">
@@ -305,19 +332,13 @@ export default function ProjectShowcase({ selling = [], delivered = [] }) {
         {/* ---------- cards ---------- */}
         <Stage
           className={`portfolio__carousel${paged ? ' is-carousel' : ''}`}
-          onMouseEnter={paged ? hold : undefined}
-          onMouseLeave={paged ? release : undefined}
-          onFocusCapture={paged ? hold : undefined}
-          onBlurCapture={paged ? release : undefined}
+          onFocusCapture={paged ? () => setHeld(true) : undefined}
+          onBlurCapture={paged ? () => setHeld(false) : undefined}
         >
           <div className="portfolio__stage" ref={stageRef}>
             <div
               className={`portfolio__grid${instant ? ' is-instant' : ''}`}
-              style={
-                paged
-                  ? { '--pf-slide': slide, '--pf-per': PER_VIEW, '--pf-dur': `${SLIDE_MS}ms` }
-                  : undefined
-              }
+              style={paged ? { '--pf-slide': slide, '--pf-dur': `${SLIDE_MS}ms` } : undefined}
             >
               {track.map((c, i) => {
                 const key = i < total ? c.key : `${c.key}--loop`
@@ -329,10 +350,12 @@ export default function ProjectShowcase({ selling = [], delivered = [] }) {
                   )
                 }
 
-                /* `inert` on everything but the two on show: it keeps the
-                   duplicate out of the accessibility tree, and it stops a Tab
-                   into an off-screen card from scrolling the clipped stage
-                   sideways and knocking the track off its transform. */
+                /* `inert` on everything but the two fully on show — the
+                   peeking third included, since it is an edge rather than a
+                   target, and is fully in view two seconds later anyway. It
+                   keeps the duplicate out of the accessibility tree, and it
+                   stops a Tab into an off-screen card from scrolling the
+                   clipped stage sideways and taking the track with it. */
                 const showing = i >= slide && i < slide + PER_VIEW
                 return (
                   <div className="portfolio__slide" key={key} inert={showing ? undefined : ''}>

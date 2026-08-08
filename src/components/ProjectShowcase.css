@@ -211,11 +211,21 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
 .is-carousel .portfolio__stage { overflow: hidden; }
 
 .is-carousel .portfolio__grid {
+  /* Cards across the window, counting the sliver of the third. Two are fully
+     on show — PER_VIEW in the component, which is what the arrows and the
+     loop move by — and the 0.4 is the next one showing its edge, so the row
+     reads as continuing rather than ending at the frame.
+
+     One step is (100% + gap) / this, and a card is that step less its gap.
+     Both hold for a fractional count exactly as they do for a whole one,
+     which is the only reason the peek costs nothing but a smaller number. */
+  --pf-view: 2.4;
+
   display: flex;
   flex-wrap: nowrap;
   width: 100%;
-  transform: translateX(calc(var(--pf-slide, 0) * (-100% - var(--_gap)) / var(--pf-per, 2)));
-  transition: transform var(--pf-dur, 720ms) cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: translateX(calc(var(--pf-slide, 0) * (-100% - var(--_gap)) / var(--pf-view)));
+  transition: transform var(--pf-dur, 560ms) cubic-bezier(0.22, 0.61, 0.36, 1);
   will-change: transform;
 }
 
@@ -223,7 +233,7 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
 .is-carousel .portfolio__grid.is-instant { transition: none; }
 
 .is-carousel .portfolio__slide {
-  flex: 0 0 calc((100% - (var(--pf-per, 2) - 1) * var(--_gap)) / var(--pf-per, 2));
+  flex: 0 0 calc((100% + var(--_gap)) / var(--pf-view) - var(--_gap));
 }
 
 /* ---------- 3c · the controls -------------------------------- */
@@ -328,13 +338,16 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
   .portfolio__card { min-height: 31rem; }
 }
 
-/* Two across on a laptop puts each card at 460–690px wide, and 3/4 of that is
-   a card taller than the screen it is being read on. So in the loop the ratio
-   gives way to a height: the crop travels from portrait to about square
-   across the band, and the section still clears the fold at 1440×900. */
+/* Two-and-a-bit across puts each card at 380–570px wide, and 3/4 of that is a
+   card taller than the screen it is being read on. So in the loop the ratio
+   gives way to a height: the crop travels from portrait to slightly landscape
+   across the band, and the section clears the fold at 1440×900.
+
+   400 is the floor, not a preference — below it the title, the copy and the
+   48px button stop fitting between the padding. */
 .is-carousel .portfolio__card {
   aspect-ratio: auto;
-  height: clamp(30rem, 21rem + 17vw, 37.5rem);   /* 480 → 600 */
+  height: clamp(25rem, 17rem + 14vw, 30.625rem);   /* 400 → 490 */
   min-height: 0;
 }
 
