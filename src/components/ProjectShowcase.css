@@ -206,25 +206,19 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
   .portfolio__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ---------- 3b · the loop of two and a peek ------------------ */
+/* ---------- 3b · the loop of two ----------------------------- */
 
-/* A clean crop, and nothing else. Fading the edge out was fading it to
-   #141618, which on this section is a fade to black — the photograph went
-   muddy exactly where it was meant to be inviting. A photograph cut square
-   by the frame is the more confident answer and the more expensive-looking
-   one; what it needed was not softening but the treatment below. */
 .is-carousel .portfolio__stage { overflow: hidden; }
 
 .is-carousel .portfolio__grid {
-  /* Cards across the window, counting the sliver of the third. Two are fully
-     on show — PER_VIEW in the component, which is what the arrows and the
-     loop move by — and the 0.4 is the next one showing its edge, so the row
-     reads as continuing rather than ending at the frame.
+  /* Cards across the window. Two, filling it exactly — no third showing its
+     edge: a cropped card at the frame read as an accident rather than as an
+     invitation, whatever was done to soften it.
 
      One step is (100% + gap) / this, and a card is that step less its gap.
-     Both hold for a fractional count exactly as they do for a whole one,
-     which is the only reason the peek costs nothing but a smaller number. */
-  --pf-view: 2.4;
+     Kept as a variable rather than folded into the two calc()s below, since
+     it is the one number that decides how this section is composed. */
+  --pf-view: 2;
 
   display: flex;
   flex-wrap: nowrap;
@@ -234,43 +228,11 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
   will-change: transform;
 }
 
-/* ---------- 3b(i) · what the third card actually shows -------- *
-
-   The peek is a photograph and nothing more. Only the two cards on show
-   carry their type, so the frame never cuts through half a title and half a
-   button — and the veil, which is heavy because that type has to stay legible
-   over a blown sky, comes almost all the way off with it. That is the whole
-   of the fix: the third card is no longer a dimmed thing behind a scrim, it
-   is the brightest image in the row, cropped.
-
-   `[inert]` is the component's own record of "not one of the two on show" —
-   see the render — so the stylesheet reads it there rather than carrying a
-   second class that could drift out of step with it. */
-
-.is-carousel .portfolio__body {
-  transition:
-    opacity var(--pf-dur, 560ms) var(--ease-out) 80ms,
-    transform var(--pf-dur, 560ms) var(--ease-out) 80ms;
-}
-
-.is-carousel .portfolio__slide[inert] .portfolio__body {
-  opacity: 0;
-  /* The same short rise .reveal uses, so type arriving on a card that has
-     just slid in reads as the house entrance rather than as a second idea.
-     Delayed above, so it lands just after the slide has settled. */
-  transform: translateY(10px);
-}
-
-.is-carousel .portfolio__slide[inert] .portfolio__veil { opacity: 0.28; }
-
-/* The frame in which the track is moved onto its duplicate. The pair on show
-   changes hands in that same frame, so everything keyed to it has to be held
-   still — otherwise landing the loop is seen as type fading up on a card that
-   never moved, which is the one thing the duplicate exists to prevent. */
-.is-carousel .portfolio__grid.is-instant,
-.is-carousel .portfolio__grid.is-instant .portfolio__slide,
-.is-carousel .portfolio__grid.is-instant .portfolio__veil,
-.is-carousel .portfolio__grid.is-instant .portfolio__body { transition: none; }
+/* Nothing is keyed to which pair is on show any more — with the window
+   holding exactly two, everything else is off-frame and the cards need no
+   ranking. The only thing to hold still on the frame where the track moves
+   onto its duplicate is the track itself. */
+.is-carousel .portfolio__grid.is-instant { transition: none; }
 
 .is-carousel .portfolio__slide {
   flex: 0 0 calc((100% + var(--_gap)) / var(--pf-view) - var(--_gap));
@@ -378,16 +340,17 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
   .portfolio__card { min-height: 31rem; }
 }
 
-/* Two-and-a-bit across puts each card at 380–570px wide, and 3/4 of that is a
-   card taller than the screen it is being read on. So in the loop the ratio
-   gives way to a height: the crop travels from portrait to slightly landscape
-   across the band, and the section clears the fold at 1440×900.
+/* Two across fills the measure, so each card runs 460–690px wide and 3/4 of
+   that would be taller than the screen it is being read on. The ratio gives
+   way to a height, and a low one: a wide card kept short reads as a spread,
+   where the same card at its own ratio reads as merely big — which is what
+   this looked like before. 628×456 at 1440, against 628×581.
 
-   400 is the floor, not a preference — below it the title, the copy and the
+   380 is the floor, not a preference. Below it the title, the copy and the
    48px button stop fitting between the padding. */
 .is-carousel .portfolio__card {
   aspect-ratio: auto;
-  height: clamp(25rem, 17rem + 14vw, 30.625rem);   /* 400 → 490 */
+  height: clamp(23.75rem, 15rem + 15vw, 28.75rem);   /* 380 → 460 */
   min-height: 0;
 }
 
@@ -561,11 +524,9 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
   .portfolio__cta,
   .portfolio__cta-icon,
   .portfolio__arrow,
-  .is-carousel .portfolio__grid,
-  .is-carousel .portfolio__body {
+  .is-carousel .portfolio__grid {
     transition: none;
   }
-  .is-carousel .portfolio__slide[inert] .portfolio__body { transform: none; }
   .portfolio__arrow:hover { transform: none; }
   .portfolio__card:hover .portfolio__media img { transform: scale(1.001); }
   .portfolio__card:hover .portfolio__title { transform: none; }

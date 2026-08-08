@@ -27,9 +27,9 @@ const COUNT_WORD = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven',
 const CAROUSEL_MQ = '(min-width: 1024px) and (max-width: 1799.98px)'
 
 /**
- * Cards fully on show, which is also what one press of an arrow moves by.
- * A sliver of the third is visible as well, but that is a width and belongs
- * to the stylesheet — see --pf-view in ProjectShowcase.css.
+ * Cards on show, which is also what one press of an arrow moves by. The
+ * matching width lives in the stylesheet as --pf-view; the two have to agree,
+ * so change neither without the other.
  */
 const PER_VIEW = 2
 
@@ -119,8 +119,8 @@ function Tile({ card }) {
  *
  * Two layouts, one markup. Below 1024px the cards are a plain stacked grid,
  * and from 1800px up they are the four-up row. Between the two — every
- * laptop — they become a loop of two and a sliver of the third, which is the
- * only mode with any JavaScript in it.
+ * laptop — they become a loop of two, which is the only mode with any
+ * JavaScript in it.
  *
  * It moves every two seconds and does not stop for the pointer. That is a
  * deliberate departure from TestimonialsSection, which never moves unasked:
@@ -350,12 +350,10 @@ export default function ProjectShowcase({ selling = [], delivered = [] }) {
                   )
                 }
 
-                /* `inert` on everything but the two fully on show — the
-                   peeking third included, since it is an edge rather than a
-                   target, and is fully in view two seconds later anyway. It
-                   keeps the duplicate out of the accessibility tree, and it
-                   stops a Tab into an off-screen card from scrolling the
-                   clipped stage sideways and taking the track with it. */
+                /* `inert` on everything but the two on show. It keeps the
+                   duplicate out of the accessibility tree, and it stops a Tab
+                   into an off-screen card from scrolling the clipped stage
+                   sideways and taking the track with it. */
                 const showing = i >= slide && i < slide + PER_VIEW
                 return (
                   <div className="portfolio__slide" key={key} inert={showing ? undefined : ''}>
