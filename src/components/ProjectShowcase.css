@@ -208,7 +208,19 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
 
 /* ---------- 3b · the loop of two ----------------------------- */
 
-.is-carousel .portfolio__stage { overflow: hidden; }
+/* The third card is not cut off at the frame, it dissolves into the band.
+   The peek is close to 17% of the window at every width in this range, so
+   the outer 9% is the fade and the 8% before it stays crisp — enough that
+   what you see reads as a photograph rather than as a gradient.
+
+   A mask rather than an overlay: it makes no assumption about what is behind
+   the section, and it fades the card's own type with it, which is what stops
+   a half-cut title and a half-cut button sitting at the edge of the row. */
+.is-carousel .portfolio__stage {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 91%, transparent 100%);
+}
 
 .is-carousel .portfolio__grid {
   /* Cards across the window, counting the sliver of the third. Two are fully
@@ -229,8 +241,24 @@ a.portfolio__cta:focus { color: var(--ink-950); text-decoration: none; }
   will-change: transform;
 }
 
-/* The frame in which the track is moved onto its duplicate. */
-.is-carousel .portfolio__grid.is-instant { transition: none; }
+/* Anything that is not one of the two on show sits back a little, so the pair
+   being looked at is unmistakably the pair being looked at and the third is
+   a hint. `[inert]` is the component's own record of exactly that set — see
+   the render — so there is no second class to keep in step with it.
+
+   0.7, not less: the point is to rank the third card, not to hide it, and
+   the mask above is already taking the outer half of it. */
+.is-carousel .portfolio__slide {
+  transition: opacity var(--pf-dur, 560ms) var(--ease-out);
+}
+.is-carousel .portfolio__slide[inert] { opacity: 0.7; }
+
+/* The frame in which the track is moved onto its duplicate. The pair on show
+   changes hands in that same frame, so the slides have to be held still too —
+   otherwise landing the loop is seen as a card brightening where nothing
+   moved, which is the one thing the duplicate exists to prevent. */
+.is-carousel .portfolio__grid.is-instant,
+.is-carousel .portfolio__grid.is-instant .portfolio__slide { transition: none; }
 
 .is-carousel .portfolio__slide {
   flex: 0 0 calc((100% + var(--_gap)) / var(--pf-view) - var(--_gap));
@@ -521,7 +549,8 @@ a.portfolio__card:focus { color: var(--sand-50); text-decoration: none; }
   .portfolio__cta,
   .portfolio__cta-icon,
   .portfolio__arrow,
-  .is-carousel .portfolio__grid {
+  .is-carousel .portfolio__grid,
+  .is-carousel .portfolio__slide {
     transition: none;
   }
   .portfolio__arrow:hover { transform: none; }
