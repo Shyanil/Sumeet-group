@@ -1,35 +1,43 @@
 /* ============================================================
-   Services — dark editorial band with three full-bleed strips.
+   Services — a typographic index with a photograph on the pointer.
 
    Co-located with its component, in the same spirit as
-   RealEstateArrowsSection.css: it reads the design system's tokens and
-   owns no globals, so the section can be lifted into another page whole.
+   ProjectShowcase.css and RealEstateArrowsSection.css: it reads the design
+   system's tokens and owns no globals, so the section can be lifted into
+   another page whole.
+
+   The layout is a list, not a grid. Each row is one line of a schedule —
+   number, mark, word, category, arrow — sitting between hairlines, and the
+   only photograph on a pointer device is the plate that rides the cursor.
+   That is why the rows can afford type this large: they are not competing
+   with three images for the same attention.
 
    Two notes on specificity. The section carries `.on-dark`, whose global
-   rule `.on-dark .sg-display` (0,2,0) sets a colour — so wherever this
-   file needs to win against it, the selector is deliberately raised to
-   `.services.on-dark` rather than left at a single class. And the strips
-   are `<a>` elements, so their colour is pinned explicitly rather than
-   left to base.css's prose-link rules.
+   rule `.on-dark .sg-display` (0,2,0) sets a colour — so wherever this file
+   needs to win against it the selector is raised to `.services.on-dark`.
+   And the rows are `<a>` elements, so their colour is pinned explicitly
+   rather than left to base.css's prose-link rules.
    ============================================================ */
 
 .services {
+  --_swap: 560ms;         /* the clip wipe between two photographs */
+  --_state: 420ms;        /* a row waking up or dimming */
+  --_dim: 0.34;           /* what the rows you are not reading fall to */
+
   background: var(--ink-950);
   color: var(--text-on-dark);
-  /* The strips run edge to edge; nothing inside may push the page sideways.
-     `clip` rather than `hidden` — it does the same job without turning the
-     section into a scroll container, the same call base.css makes on body. */
+  /* `clip` rather than `hidden` — same job without turning the section into
+     a scroll container, the call base.css already makes on body. */
   overflow-x: clip;
+  padding-bottom: clamp(3rem, 2rem + 4.4vw, 5.5rem);
 }
 
-/* ---------- 1 · intro ---------------------------------------- *
-   Label hard left, heading held off the left margin so it lands around
-   the middle of the measure. Below 1024px the two simply stack. */
+/* ---------- 1 · intro ---------------------------------------- */
 
 .services__intro {
   display: grid;
   gap: clamp(1.25rem, 3vw, 2rem);
-  padding-block: clamp(3rem, 2rem + 4.4vw, 5.5rem) clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
+  padding-block: clamp(3rem, 2rem + 4.4vw, 5.5rem) clamp(2.5rem, 1.6rem + 3.4vw, 4rem);
 }
 
 @media (min-width: 1024px) {
@@ -41,8 +49,8 @@
 }
 
 .services__label {
-  /* The eyebrow component is inline-flex; this keeps it on its own line
-     at the very top of the left column. */
+  /* The eyebrow component is inline-flex; this keeps it on its own line at
+     the very top of the left column. */
   align-self: start;
 }
 
@@ -50,41 +58,50 @@
   margin: 0;
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
-  font-size: clamp(2.375rem, 1.1rem + 5vw, 5rem);   /* 38 → 80 */
-  line-height: 1.04;
+  font-size: clamp(2.125rem, 1rem + 4.4vw, 4.5rem);   /* 34 → 72 */
+  line-height: 1.06;
   letter-spacing: -0.028em;
   color: var(--sand-50);
   text-wrap: pretty;
 }
 
 /* The house rule: the closing line of a heading turns gold rather than
-   grey. On a dark ground that is --gold-300 (11:1); on paper it is
-   --gold-700 (4.8:1), the only gold in the scale that clears small text on
-   white. See .sg-display em in base.css, which is the same gesture. */
+   grey. On a dark ground that is --gold-300 (11:1). See .sg-display em in
+   base.css, which is the same gesture. */
 .services.on-dark .services__heading span {
   color: var(--gold-300);
 }
 
-/* ---------- 2 · the strips ----------------------------------- *
-   Each row is one full-width photograph with a flat scrim over it. The
-   row content sits inside `.wrap`, so the number and the arrow line up
-   with every other section's left and right edges on the page. */
+/* ---------- 2 · the index ------------------------------------ */
 
 .services__list {
+  position: relative;   /* the plate is positioned against this box */
+}
+
+.services__hairline {
   display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.16);
+  transform-origin: left;
+}
+
+.services__item {
+  position: relative;
 }
 
 .services__row {
   position: relative;
-  display: flex;
+  z-index: 1;
+  display: grid;
   align-items: center;
-  isolation: isolate;
-  overflow: hidden;
-  min-height: clamp(18.75rem, 13rem + 17vw, 23.75rem);   /* 300 → 380, phones */
-  background: var(--ink-950);
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  grid-template-areas: 'no mark word cat go';
+  column-gap: clamp(1rem, 2.4vw, 2.25rem);
+  padding-block: clamp(1.5rem, 1rem + 2.2vw, 2.5rem);
   color: var(--sand-50);
   text-decoration: none;
   cursor: pointer;
+  transition: opacity var(--_state) var(--ease-out);
 }
 
 /* Belt and braces against base.css's prose-link colour. */
@@ -93,213 +110,313 @@
   color: var(--sand-50);
 }
 
-/* Full-bleed strips have no inner edge to offset a ring against, so the
-   focus ring is drawn inside the row rather than around it. */
+/* The rows you are not reading step back so the one you are reads as the
+   only line on the page. Opacity, so nothing moves and nothing reflows. */
+.services__row[data-dim='true'] {
+  opacity: var(--_dim);
+}
+
 .services__row:focus-visible {
   outline: 2px solid var(--color-gold);
-  outline-offset: -6px;
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
 }
 
-@media (min-width: 769px) {
-  .services__row {
-    min-height: clamp(15.625rem, 8rem + 11vw, 20rem);    /* 250 → 320, desktop */
-  }
-}
+/* --- number --- */
 
-.services__media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.services__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.001);   /* a resting transform keeps the scale-up crisp */
-  transition:
-    transform 780ms var(--ease-out),
-    filter 620ms var(--ease-out);
-  will-change: transform;
-}
-
-/* Dark enough for white type, light enough that the photograph is still
-   the subject. The slight left weighting is for the description column. */
-.services__scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(9, 12, 18, 0.66) 0%,
-    rgba(9, 12, 18, 0.54) 46%,
-    rgba(9, 12, 18, 0.58) 100%
-  );
-  transition: opacity 620ms var(--ease-out);
-}
-
-/* The hover gesture. A band of warm light travels across the row from the
-   left, on top of the photograph and under the type — the row lighting up
-   rather than the row changing state. Transform only, so it costs nothing. */
-.services__sheen {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(221, 173, 103, 0.10) 38%,
-    rgba(255, 236, 205, 0.20) 50%,
-    rgba(221, 173, 103, 0.10) 62%,
-    transparent 100%
-  );
-  transform: translateX(-100%);
-  transition: opacity 300ms var(--ease-out);
-}
-
-/* A hairline is the whole resting composition: a number, a line of copy, the
-   word, an arrow. The row only becomes a photograph when it is asked to. */
-.services__row + .services__row { border-top: 1px solid rgba(255, 255, 255, 0.1); }
-
-.services__row-inner {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  align-items: center;
-  /* 1fr · auto · 1fr — the giant word is centred on the page rather than
-     on its own column, so all three rows read off one axis regardless of
-     how wide "Live", "Work" or "Invest" happens to be. */
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  column-gap: clamp(1.25rem, 3vw, 3.5rem);
-  padding-block: clamp(1.75rem, 4vw, 2.5rem);
-}
-
-.services__meta {
-  display: flex;
-  align-items: flex-start;
-  gap: clamp(0.75rem, 1.2vw, 1.125rem);
-  justify-self: start;
-  min-width: 0;
-}
-
-.services__number {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: var(--radius-pill);
+.services__no {
+  grid-area: no;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.92);
+  letter-spacing: var(--tracking-wider);
+  color: rgba(255, 255, 255, 0.55);
+  transition: color var(--_state) var(--ease-out);
 }
 
-/* Sits at the reference's 230–300px from roughly 1150px up. Below that the
-   column narrows with the viewport rather than fighting the giant title for
-   the same horizontal space. */
-.services__desc {
-  max-width: clamp(11.875rem, 20vw, 18.75rem);   /* 190 → 300 */
-  font-family: var(--font-sans);
-  font-size: clamp(0.875rem, 0.78rem + 0.2vw, 0.9375rem);
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.86);
-  text-wrap: pretty;
+.services__row[data-active='true'] .services__no {
+  color: var(--gold-300);
 }
 
-.services__title {
-  justify-self: center;
+/* --- the mark: a rule that extends as the row wakes --- */
+
+.services__mark {
+  grid-area: mark;
+  width: clamp(1.5rem, 3vw, 3rem);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.32);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition:
+    transform var(--_state) var(--ease-out),
+    background-color var(--_state) var(--ease-out);
+}
+
+.services__row[data-active='true'] .services__mark {
+  /* scaleX rather than width — the mark grows without asking the row to
+     lay itself out again on every frame. */
+  transform: scaleX(1.9);
+  background: var(--gold-300);
+}
+
+/* --- the word --- */
+
+.services__word {
+  grid-area: word;
   margin: 0;
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
-  font-size: clamp(3.5rem, 1rem + 13vw, 5.625rem);   /* 56 → 90, phones */
-  line-height: 0.92;
-  letter-spacing: -0.03em;
+  font-size: clamp(2.5rem, 1.2rem + 4.6vw, 5.25rem);   /* 40 → 84 */
+  line-height: 1;
+  letter-spacing: -0.032em;
   color: #fff;
-  transition: transform 620ms var(--ease-out);
+  transition: transform var(--_state) var(--ease-out);
 }
 
-@media (min-width: 769px) {
-  .services__title {
-    font-size: clamp(3.75rem, 1rem + 8vw, 10.5rem);   /* 60 → 168, desktop */
-  }
+.services__row[data-active='true'] .services__word {
+  transform: translateX(clamp(0.5rem, 1.2vw, 1.125rem));
 }
 
-.services__arrow-wrap {
+/* --- category + description --- */
+
+.services__cat {
+  grid-area: cat;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.62);
+  transition: color var(--_state) var(--ease-out);
+}
+
+.services__row[data-active='true'] .services__cat {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* On a pointer device the description is the plate's job — the row stays a
+   line of type. Clipped rather than `display: none`, because that would
+   drop three good sentences out of the accessibility tree entirely. It
+   returns to the flow in the stacked layout below. */
+.services__desc {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  grid-area: desc;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(0.875rem, 0.8rem + 0.2vw, 0.9375rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  text-wrap: pretty;
+}
+
+/* --- arrow --- */
+
+.services__go {
+  grid-area: go;
   display: inline-flex;
-  justify-self: end;
-  color: #fff;
-  transition: transform 620ms var(--ease-out);
+  color: rgba(255, 255, 255, 0.55);
+  transition:
+    transform var(--_state) var(--ease-out),
+    color var(--_state) var(--ease-out);
 }
 
-.services__arrow {
-  display: block;
-  width: clamp(3rem, 11vw, 4.5rem);   /* 48 → 72, phones */
+.services__go svg {
+  width: clamp(1.25rem, 2vw, 1.75rem);
   height: auto;
 }
 
-@media (min-width: 769px) {
-  .services__arrow {
-    width: clamp(4rem, 6.6vw, 8.125rem);   /* 64 → 130, desktop */
-  }
+.services__row[data-active='true'] .services__go {
+  transform: translateX(10px);
+  color: var(--gold-300);
 }
 
-/* ---------- interaction -------------------------------------- *
-   Pointer only: a touch device fires :hover on tap and would leave the
-   row stuck in its hovered state. */
+/* --- the thumbnail the plate replaces --- */
 
-@media (hover: hover) {
-  /* The photograph comes forward and up out of its own shadow. */
-  .services__row:hover .services__media img,
-  .services__row:focus-visible .services__media img {
-    transform: scale(1.06);
-    filter: saturate(1.08) contrast(1.03);
-  }
+.services__thumb { display: none; }
 
-  /* Scrim lifts, so what brightens is the picture and not the type over it. */
-  .services__row:hover .services__scrim,
-  .services__row:focus-visible .services__scrim {
-    opacity: 0.72;
-  }
+/* ---------- 3 · the plate ------------------------------------ *
+   Parked at the list's origin and moved by GSAP, which writes translate on
+   the outer element. The frame carries every other transform, so the two
+   never contend for the same property. */
 
-  .services__row:hover .services__sheen,
-  .services__row:focus-visible .services__sheen {
+.services__plate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  --_w: clamp(15rem, 19vw, 21rem);
+  width: var(--_w);
+  aspect-ratio: 3 / 4;
+  /* Centred on the pointer without JS having to measure anything. The
+     height is --_w * 4/3, so half of it is --_w * 2/3. */
+  margin-top: calc(var(--_w) * -0.6667);
+  margin-left: calc(var(--_w) / -2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--_state) var(--ease-out);
+}
+
+/* Only shown once a row is being read, so the plate never sits over the
+   list uninvited. */
+.services__list[data-reading='true'] .services__plate {
+  opacity: 1;
+}
+
+.services__plate-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--ink-900);
+  box-shadow: var(--shadow-xl);
+  transform: scale(0.94);
+  transition: transform var(--_state) var(--ease-out);
+}
+
+.services__list[data-reading='true'] .services__plate-frame {
+  transform: scale(1);
+}
+
+.services__plate-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Closed: wiped shut against the bottom edge. The incoming photograph
+     opens upward over the outgoing one, which is already fading. */
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  transition:
+    clip-path var(--_swap) var(--ease-out),
+    opacity 180ms var(--ease-out);
+}
+
+.services__plate-frame img[data-active='true'] {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+
+/* --- the caption --- */
+
+.services__caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 1;
+  display: grid;
+  padding: 2.75rem 1.25rem 1.25rem;
+  background: linear-gradient(to top, rgba(9, 12, 18, 0.92), transparent);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
+  text-wrap: pretty;
+}
+
+/* Stacked in one cell so the plate's height never depends on which line is
+   showing — the frame must not resize as the photograph swaps. */
+.services__caption > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.services__caption > span[data-active='true'] {
+  opacity: 1;
+  transition-delay: 160ms;
+}
+
+/* ---------- 4 · the stack ------------------------------------ *
+   Below 900px there is no pointer to follow. The plate is dropped, each row
+   grows its own thumbnail and its description, and the schedule becomes a
+   set of cards. The two image sets are display:none to each other, so
+   `loading="lazy"` means only one of them is ever fetched. */
+
+@media (max-width: 899px), (hover: none) {
+  .services__plate { display: none; }
+
+  .services__row {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'no    cat'
+      'thumb thumb'
+      'word  go'
+      'desc  desc';
+    align-items: center;
+    row-gap: 0.875rem;
+    column-gap: 1rem;
+    padding-block: clamp(1.5rem, 4vw, 2rem);
+    /* The rows never dim on touch: there is no pointer to say which one is
+       being read, so dimming two of three would just look broken. */
     opacity: 1;
-    animation: services-sweep 1150ms var(--ease-out);
   }
 
-  .services__row:hover .services__title,
-  .services__row:focus-visible .services__title {
-    transform: translateY(-3px);
+  .services__mark { display: none; }
+
+  .services__thumb {
+    display: block;
+    grid-area: thumb;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    aspect-ratio: 16 / 10;
   }
 
-  .services__row:hover .services__arrow-wrap,
-  .services__row:focus-visible .services__arrow-wrap {
-    transform: translateX(16px);
+  .services__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .services__word {
+    font-size: clamp(2.25rem, 1.4rem + 4vw, 3.25rem);
+    transform: none;
+  }
+
+  .services__cat {
+    justify-self: end;
+    white-space: normal;
+    text-align: right;
+  }
+
+  .services__go {
+    grid-area: go;
+    justify-self: end;
+    transform: none;
+    color: var(--gold-300);
+  }
+
+  .services__desc {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
   }
 }
 
-@keyframes services-sweep {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(100%); }
-}
-
-/* ---------- 3 · closing statement ---------------------------- */
+/* ---------- 5 · closing statement ---------------------------- */
 
 .services__footer {
   display: grid;
   justify-items: start;
   gap: clamp(1.75rem, 3.5vw, 2.5rem);
-  padding-block: clamp(2.75rem, 1.8rem + 3.6vw, 4.5rem) clamp(3rem, 2rem + 4.4vw, 5.5rem);
+  padding-block: clamp(2.75rem, 1.8rem + 3.6vw, 4.5rem) 0;
 }
 
 .services.on-dark .services__statement {
-  /* Narrow enough to break into three lines at desktop, as the reference
-     does — the statement is a block of type, not a paragraph. */
+  /* Narrow enough to break into three lines at desktop — the statement is a
+     block of type, not a paragraph. */
   max-width: 34ch;
   font-family: var(--font-display);
   font-weight: var(--weight-regular);
@@ -331,56 +448,54 @@
   --_bd: rgba(251, 250, 247, 0.6);
 }
 
-/* ---------- Mobile composition ------------------------------- *
-   Not the desktop row squeezed: the description moves to the top of the
-   panel and the word and arrow drop to the baseline, so the photograph
-   keeps the middle of the frame. */
-
-@media (max-width: 768px) {
-  .services__row-inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto 1fr;
-    align-items: end;
-    row-gap: clamp(1.25rem, 5vw, 2rem);
-  }
-
-  .services__meta {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    align-self: start;
-  }
-
-  .services__desc {
-    max-width: 34ch;
-  }
-
-  .services__title {
-    grid-column: 1;
-    grid-row: 2;
-    justify-self: start;
-    align-self: end;
-  }
-
-  .services__arrow-wrap {
-    grid-column: 2;
-    grid-row: 2;
-    align-self: end;
-    padding-bottom: 0.35em;
-  }
-}
-
-/* ---------- Reduced motion ----------------------------------- */
+/* ---------- Reduced motion ----------------------------------- *
+   A cursor-tracked photograph is motion with no still equivalent, so it is
+   not slowed down — it is replaced by the stacked layout's thumbnails, the
+   same composition a phone gets. GSAP never runs; see the component. */
 
 @media (prefers-reduced-motion: reduce) {
-  .services__media img,
-  .services__scrim,
-  .services__sheen,
-  .services__title,
-  .services__arrow-wrap,
-  .services__cta .sg-btn__icon {
-    transition: none;
+  .services__plate { display: none; }
+  .services__thumb {
+    display: block;
+    grid-area: thumb;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    aspect-ratio: 16 / 10;
   }
-  .services__row:hover .services__sheen { animation: none; opacity: 0; }
-  .services__row:hover .services__media img { transform: none; }
-  .services__row:hover .services__title { transform: none; }
+  .services__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  .services__row {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'no    cat'
+      'thumb thumb'
+      'word  go'
+      'desc  desc';
+    row-gap: 0.875rem;
+    opacity: 1;
+  }
+  .services__mark { display: none; }
+  .services__desc {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+  .services__cat { justify-self: end; }
+  .services__go { justify-self: end; color: var(--gold-300); }
+
+  .services__row,
+  .services__no,
+  .services__word,
+  .services__cat,
+  .services__go,
+  .services__plate,
+  .services__plate-frame,
+  .services__plate-frame img {
+    transition: none;
+    transform: none;
+  }
 }
