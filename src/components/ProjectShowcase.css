@@ -34,6 +34,14 @@
   overflow-x: clip;
 }
 
+/* Shared dark surface: Services, portfolio and client stories should read as
+   one continuous family rather than three unrelated charcoal values. */
+.services,
+.portfolio,
+.tm {
+  background: var(--color-ink-surface);
+}
+
 .portfolio::before {
   content: '';
   position: absolute;

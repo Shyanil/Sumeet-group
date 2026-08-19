@@ -27,6 +27,8 @@
   overflow-x: clip;
 }
 
+.tm { background: var(--color-ink-surface); }
+
 .tm::before {
   content: '';
   position: absolute;
