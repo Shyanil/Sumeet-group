@@ -4,6 +4,7 @@ import { initSmoothScroll, destroySmoothScroll, resetScroll, ScrollTrigger } fro
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import HomeTwo from './pages/HomeTwo'
 import Projects from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import About from './pages/About'
@@ -13,19 +14,24 @@ import NotFound from './pages/NotFound'
 /**
  * Route table.
  *
- * Only the home page is live. Projects, About, Contact and the project
+ * Only the home pages are live. Projects, About, Contact and the project
  * detail pages are built (see pages/) but are not being served yet, so every
- * path other than "/" lands on the holding page. The imports and the branches
- * below are kept rather than deleted: turning a page back on is uncommenting
- * one line, not rebuilding the route.
+ * other path lands on the holding page. The imports and the branches below
+ * are kept rather than deleted: turning a page back on is uncommenting one
+ * line, not rebuilding the route.
+ *
+ * "/home-two" is a second art direction for the home page, shown alongside
+ * the live one for review. "/home_two" is accepted as the same route because
+ * that is how it tends to get typed.
  */
-const LIVE = new Set(['/'])
+const LIVE = new Set(['/', '/home-two', '/home_two'])
 
 function Screen({ path }) {
   // Treat /about and /about/ as the same route.
   const p = path.length > 1 ? path.replace(/\/+$/, '') : path
   if (!LIVE.has(p)) return <NotFound path={p} />
   if (p === '/') return <Home />
+  if (p === '/home-two' || p === '/home_two') return <HomeTwo />
   // Not yet served — add the path to LIVE above to bring one back.
   if (p === '/projects') return <Projects />
   if (p.startsWith('/projects/')) return <ProjectDetail slug={p.slice('/projects/'.length)} />
@@ -36,6 +42,8 @@ function Screen({ path }) {
 
 const TITLES = {
   '/': 'Sumeet Group · Real estate in Raipur',
+  '/home-two': 'Sumeet Group · Real estate in Raipur',
+  '/home_two': 'Sumeet Group · Real estate in Raipur',
 }
 
 /**

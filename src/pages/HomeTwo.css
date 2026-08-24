@@ -1,0 +1,1059 @@
+/* ============================================================
+   Home two — an alternate art direction for the home page.
+
+   Editorial-luxury: full-bleed photographic bands alternating with cream
+   sheets, display serif set very large, wide-tracked mono labels over
+   hairlines, ring and pill controls.
+
+   COLOUR: nothing new is defined here. Every value resolves to a token
+   from styles/tokens.css — sand for the paper, ink for the dark bands,
+   the logo gold for accent. The reference this is cut from uses forest
+   green and cream; the brand's own ink and sand stand in for those, so
+   the page reads as a different design rather than a different company.
+
+   CONTRAST: small text on the cream sheets uses --text-soft (#6A6C77,
+   4.7:1) rather than --text-muted (#888A95, 3.1:1), which does not clear
+   AA at these sizes. --text-muted is kept only where it sits on white or
+   is decorative.
+
+   Everything is namespaced under `.ht` / `.ht-*`, so none of it can reach
+   the live home page.
+   ============================================================ */
+
+.ht {
+  --ht-paper: var(--sand-100);
+  --ht-paper-2: var(--sand-50);
+  --ht-deep: var(--ink-950);
+  --ht-deep-2: var(--color-ink-surface);
+  --ht-cream: var(--gold-50);
+  --ht-gold: var(--gold-400);
+  --ht-gold-soft: var(--gold-200);
+  --ht-rule: var(--sand-300);
+  --ht-rule-dark: rgba(221, 173, 103, 0.26);
+  --ht-quiet: var(--text-soft);
+  --ht-gold-text: var(--gold-800);
+
+  /* One vertical rhythm for the whole page, so the bands read as a set. */
+  --ht-y: clamp(4.5rem, 2rem + 8vw, 9rem);
+  --ht-y-lg: clamp(6rem, 3rem + 11vw, 12rem);
+
+  background: var(--ht-paper);
+}
+
+/* ---------- Type roles ------------------------------------- *
+   Newsreader at regular weight. The display serif carries the whole voice
+   of this page, so it is never bolder than 400 — the size does the work
+   instead. Optical sizing is pushed above what the size alone would ask
+   for on the mid-scale headings, which is where the high-contrast,
+   fashion-serif look actually comes from. */
+.ht-display {
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-optical-sizing: auto;
+  line-height: 1.06;
+  letter-spacing: -0.014em;
+  color: var(--ink-900);
+  text-wrap: balance;
+}
+.ht-display em {
+  font-style: italic;
+  color: var(--color-gold-deep);
+}
+
+/* The section label: a short gold rule, then wide-tracked mono. Repeating
+   this one shape is most of what gives the page its rhythm. */
+.ht-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ht-gold-text);
+}
+.ht-kicker i {
+  width: 34px;
+  height: 1px;
+  background: var(--color-gold-line);
+}
+.ht-kicker--dark { color: var(--gold-300); }
+.ht-kicker--dark i { background: var(--gold-600); }
+.ht-kicker--center { display: flex; justify-content: center; }
+
+.ht-script {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  color: var(--color-gold-deep);
+  margin-bottom: var(--space-4);
+}
+
+.ht-req { color: var(--color-action); }
+
+/* ---------- Shared controls -------------------------------- */
+
+.ht-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding-inline: var(--space-6) var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--ht-deep);
+  color: var(--gold-50);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+}
+.ht-pill svg { transition: transform var(--duration-base) var(--ease-out); }
+.ht-pill:hover { background: var(--color-gold-deep); color: #fff; }
+.ht-pill:hover svg { transform: translateX(4px); }
+/* Pressed state, because a hover that never fires on touch is not feedback. */
+.ht-pill:active { background: var(--brick-700); color: #fff; }
+
+.ht-pill--ghost {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.42);
+  color: #fff;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.ht-pill--ghost:hover { background: var(--ht-gold); border-color: var(--ht-gold); color: var(--ink-950); }
+.ht-pill--ghost:active { background: var(--gold-500); border-color: var(--gold-500); color: var(--ink-950); }
+
+/* ============================================================
+   1 · Hero
+   ============================================================ */
+
+.ht-hero {
+  position: relative;
+  height: 300vh;
+  /* Climb under the sticky header so the scene owns the whole viewport. */
+  margin-top: calc(-1 * var(--header-h) - 1px);
+  background: var(--ht-deep);
+}
+
+.ht-hero__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 32rem;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--ht-deep);
+}
+
+.ht-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
+  transform: scale(1.05);
+  will-change: transform;
+}
+
+/* Enough shade at the foot for cream serif to sit on the render, and a
+   little at the head so the reversed-out header has something to hold. */
+.ht-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(25, 26, 31, 0.82) 0%, rgba(25, 26, 31, 0.34) 44%, transparent 70%),
+    linear-gradient(to bottom, rgba(25, 26, 31, 0.46) 0%, transparent 24%);
+}
+/* A soft corner falloff. It is what stops a full-bleed render reading like
+   a stock photograph pasted behind the type. */
+.ht-hero__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 88% at 50% 44%, transparent 42%, rgba(25, 26, 31, 0.42) 100%);
+}
+
+.ht-hero__copy {
+  position: absolute;
+  inset: auto 0 clamp(4.5rem, 11vh, 8rem);
+  padding-inline: clamp(1.25rem, 0.5rem + 3vw, 4.5rem);
+}
+
+/* All three acts share one grid cell, so the tallest sets the height and a
+   line that wraps on a narrow phone cannot spill over the cue below. */
+.ht-hero__acts {
+  display: grid;
+  margin: 0;
+  font-size: clamp(1.95rem, 0.7rem + 5.6vw, 5.25rem);
+}
+.ht-hero__act {
+  grid-area: 1 / 1;
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  font-optical-sizing: auto;
+  line-height: 1.06;
+  letter-spacing: -0.016em;
+  color: var(--gold-50);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.ht-hero__act:first-child { opacity: 1; }
+.ht-hero__act > span,
+.ht-hero__act > em { display: block; }
+/* The reference's signature: line two in italic gold. */
+.ht-hero__act > em {
+  font-style: italic;
+  color: var(--ht-gold-soft);
+}
+
+.ht-hero__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-top: clamp(1.75rem, 1rem + 2.5vw, 3rem);
+}
+
+.ht-hero__index {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold-100);
+}
+.ht-hero__n { opacity: 0.28; }
+.ht-hero__n:first-child { opacity: 1; }
+.ht-hero__n + .ht-hero__n::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  margin-right: 14px;
+  vertical-align: middle;
+  background: var(--gold-600);
+}
+@media (max-width: 640px) { .ht-hero__index { display: none; } }
+
+.ht-hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+}
+.ht-hero__cue i {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--ht-gold), transparent);
+}
+@media (max-width: 900px) { .ht-hero__cue { display: none; } }
+@media (max-width: 700px) { .ht-hero { height: 260vh; } }
+
+/* ============================================================
+   2 · Statement
+   ============================================================ */
+
+.ht-statement {
+  background: var(--ht-paper);
+  padding-block: var(--ht-y) clamp(3rem, 1.5rem + 5vw, 5.5rem);
+  text-align: center;
+}
+
+.ht-statement__line {
+  font-size: clamp(2rem, 0.5rem + 6vw, 5rem);
+  max-width: 22ch;
+  margin-inline: auto;
+  text-wrap: balance;
+}
+
+.ht-statement__lede {
+  max-width: 56ch;
+  margin: var(--space-7) auto 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--ht-quiet);
+}
+
+.ht-statement__media {
+  margin-top: clamp(2.5rem, 1rem + 5vw, 5rem);
+  padding-inline: clamp(1.25rem, 0.5rem + 3vw, 2rem);
+}
+.ht-statement__media img {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-inline: auto;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+}
+
+/* The figures, ruled like a schedule rather than boxed like cards. */
+.ht-figures {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  margin-top: clamp(2.5rem, 1rem + 4vw, 4.5rem);
+  border-top: 1px solid var(--ht-rule);
+  text-align: left;
+}
+@media (min-width: 880px) { .ht-figures { grid-template-columns: repeat(4, 1fr); } }
+
+.ht-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: var(--space-6) var(--space-4) var(--space-6) 0;
+  border-bottom: 1px solid var(--ht-rule);
+}
+/* Vertical rules only where the row is genuinely four across — at two
+   columns they would strand a hairline at the end of each row. */
+@media (min-width: 880px) {
+  .ht-figure { border-bottom: 0; }
+  .ht-figure + .ht-figure { border-left: 1px solid var(--ht-rule); padding-left: var(--space-5); }
+}
+
+.ht-figure__v {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: clamp(2.5rem, 1.4rem + 2.8vw, 3.75rem);
+  line-height: 1;
+  color: var(--ink-900);
+}
+.ht-figure__l { font-size: var(--text-sm); color: var(--text-body); }
+.ht-figure__s {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ht-quiet);
+}
+
+/* ============================================================
+   3 · Ink band
+   ============================================================ */
+
+.ht-ink {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--ht-deep);
+  padding-block: var(--ht-y-lg);
+}
+/* The facet motif from the design system, at a whisper. It gives the flat
+   ink some structure without becoming a pattern you notice. */
+.ht-ink__facets {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  background: var(--facet-grid);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 50%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(70% 60% at 50% 50%, #000 0%, transparent 100%);
+}
+
+.ht-ink__body { text-align: center; }
+
+.ht-ink__title {
+  font-size: clamp(2.5rem, 0.4rem + 8.5vw, 6.5rem);
+  color: var(--gold-50);
+}
+.ht-ink__title em { color: var(--ht-gold); }
+
+.ht-ink__lede {
+  max-width: 50ch;
+  margin: var(--space-6) auto 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-on-dark);
+}
+
+/* The ring button — the reference's signature control. */
+.ht-ring {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: clamp(8.5rem, 6rem + 6vw, 11rem);
+  aspect-ratio: 1;
+  margin-top: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+  border: 1px solid var(--ht-gold);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-100);
+  text-align: center;
+  touch-action: manipulation;
+  transition:
+    background var(--duration-slow) var(--ease-out),
+    color var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.ht-ring svg { transition: transform var(--duration-base) var(--ease-out); }
+.ht-ring:hover {
+  background: var(--ht-gold);
+  color: var(--ink-950);
+  transform: scale(1.04);
+}
+.ht-ring:hover svg { transform: translateX(4px); }
+.ht-ring:active { background: var(--gold-500); color: var(--ink-950); transform: scale(0.99); }
+
+/* ============================================================
+   4 · Portfolio index
+   ============================================================ */
+
+.ht-portfolio {
+  background: var(--ht-paper);
+  padding-block: var(--ht-y);
+}
+
+.ht-head { text-align: center; margin-bottom: clamp(2.75rem, 1.5rem + 4vw, 5rem); }
+.ht-head__title { font-size: clamp(2.1rem, 0.9rem + 4.6vw, 4.25rem); }
+.ht-head__lede {
+  max-width: 52ch;
+  margin: var(--space-5) auto 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--ht-quiet);
+}
+
+.ht-portfolio__grid {
+  display: grid;
+  gap: clamp(2.75rem, 1.5rem + 3vw, 4rem) var(--space-8);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1100px) { .ht-portfolio__grid { grid-template-columns: repeat(2, 1fr); } }
+
+.ht-set__cards {
+  display: grid;
+  gap: var(--space-7) var(--space-5);
+  grid-template-columns: 1fr;
+  margin-top: var(--space-6);
+}
+@media (min-width: 520px) { .ht-set__cards { grid-template-columns: repeat(2, 1fr); } }
+
+/* The group header: an icon, a wide-tracked label, a count, a hairline. */
+.ht-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--ht-rule);
+  color: var(--color-gold-deep);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.ht-group span { color: var(--ink-800); }
+.ht-group em { margin-left: auto; font-style: normal; color: var(--ht-quiet); }
+
+/* ---------- Card ------------------------------------------- */
+
+.ht-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: inherit;
+}
+.ht-card--link { border-radius: var(--radius-xs); }
+.ht-card--link:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 6px; }
+
+.ht-card__media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--sand-200);
+  margin-bottom: var(--space-3);
+}
+.ht-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms var(--ease-out);
+}
+.ht-card--link:hover .ht-card__media img,
+.ht-card--link:focus-visible .ht-card__media img { transform: scale(1.045); }
+
+/* Status is stated in words, never by colour alone. */
+.ht-card__status {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 8px 14px;
+  background: var(--ht-deep);
+  color: var(--gold-100);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ht-card__meta { display: flex; align-items: baseline; gap: 12px; }
+.ht-card__n {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--ht-gold-text);
+}
+.ht-card__place {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ht-quiet);
+}
+
+.ht-card__title {
+  display: block;
+  font-size: clamp(1.375rem, 1.05rem + 1.1vw, 1.8125rem);
+  font-variation-settings: 'opsz' 46;
+  transition: color var(--duration-base) var(--ease-out);
+}
+.ht-card__arrow {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 10px;
+  color: var(--color-gold-deep);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity var(--duration-base) var(--ease-out), transform var(--duration-base) var(--ease-out);
+}
+.ht-card--link:hover .ht-card__title,
+.ht-card--link:focus-visible .ht-card__title { color: var(--color-gold-deep); }
+.ht-card--link:hover .ht-card__arrow,
+.ht-card--link:focus-visible .ht-card__arrow { opacity: 1; transform: none; }
+
+.ht-card__note {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--ht-quiet);
+  max-width: 42ch;
+}
+
+/* ============================================================
+   5 · Plaza band
+   ============================================================ */
+
+.ht-band {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  padding-block: var(--ht-y-lg);
+}
+.ht-band__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+/* An ink duotone rather than a flat scrim: the photograph keeps its shape
+   but comes back in the brand's own dark, so gold reads cleanly on it. */
+.ht-band__tint {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(25, 26, 31, 0.88) 0%, rgba(35, 36, 42, 0.74) 46%, rgba(25, 26, 31, 0.92) 100%);
+}
+
+.ht-band__body { text-align: center; }
+.ht-band__title {
+  font-size: clamp(2.1rem, 0.6rem + 5.4vw, 4.75rem);
+  color: var(--gold-50);
+}
+.ht-band__title em { display: block; color: var(--ht-gold); }
+
+.ht-marks {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+  margin-top: clamp(3rem, 1.5rem + 5vw, 5.5rem);
+  padding-top: clamp(2.5rem, 1.5rem + 3vw, 3.5rem);
+  border-top: 1px solid var(--ht-rule-dark);
+  text-align: left;
+}
+@media (min-width: 860px) { .ht-marks { grid-template-columns: repeat(3, 1fr); gap: var(--space-5); } }
+
+.ht-mark { display: flex; align-items: center; gap: var(--space-4); }
+.ht-mark__ring {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  border: 1px solid var(--ht-rule-dark);
+  border-radius: 50%;
+  color: var(--ht-gold);
+}
+.ht-mark__text { display: flex; flex-direction: column; gap: 5px; }
+.ht-mark__title {
+  font-size: 1.3125rem;
+  font-variation-settings: 'opsz' 46;
+  color: var(--gold-50);
+}
+.ht-mark__sub {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-soft);
+}
+
+/* ============================================================
+   6 · Residence panel
+   ============================================================ */
+
+.ht-panel { background: var(--ht-paper-2); padding-top: var(--ht-y); }
+
+.ht-panel__inner {
+  display: grid;
+  gap: clamp(2rem, 1rem + 4vw, 4.5rem);
+  align-items: start;
+}
+@media (min-width: 980px) { .ht-panel__inner { grid-template-columns: 1fr 1fr; } }
+
+.ht-panel__media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.ht-panel__body { display: flex; flex-direction: column; gap: var(--space-4); }
+.ht-panel__body .ht-kicker { margin-bottom: 0; }
+.ht-panel__title { font-size: clamp(2rem, 1.2rem + 2.6vw, 3.375rem); }
+.ht-panel__lede {
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--ht-quiet);
+  max-width: 46ch;
+}
+
+.ht-specs { margin: var(--space-3) 0 0; }
+.ht-specs__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--ht-rule);
+}
+.ht-specs__row dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ht-quiet);
+}
+.ht-specs__row dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-size: 1.125rem;
+  color: var(--ink-900);
+  text-align: right;
+}
+
+.ht-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 560px) { .ht-boxes { grid-template-columns: repeat(4, 1fr); } }
+
+.ht-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-height: 108px;
+  padding: var(--space-4) var(--space-2);
+  border: 1px solid var(--ht-rule);
+  text-align: center;
+  color: var(--ink-800);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.ht-box svg { color: var(--color-gold-deep); }
+
+.ht-panel__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+.ht-arrows { display: flex; align-items: center; gap: var(--space-3); }
+.ht-arrows button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--ht-rule);
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-800);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out),
+    background var(--duration-base) var(--ease-out);
+}
+.ht-arrows button:hover { border-color: var(--ht-gold); color: var(--color-gold-deep); }
+.ht-arrows button:active { background: var(--gold-100); }
+.ht-arrows__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ht-quiet);
+}
+
+/* The strip of names under the panel. */
+.ht-tabs {
+  display: flex;
+  margin-top: clamp(3rem, 1.5rem + 4vw, 5rem);
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid var(--ht-rule);
+}
+.ht-tabs::-webkit-scrollbar { display: none; }
+
+.ht-tab {
+  flex: 1 0 min(64vw, 22rem);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 96px;
+  padding: var(--space-6) var(--space-5);
+  border: 0;
+  border-right: 1px solid var(--ht-rule);
+  background: var(--ht-paper);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background var(--duration-base) var(--ease-out);
+}
+.ht-tab .ht-display { font-size: 1.375rem; font-variation-settings: 'opsz' 46; }
+.ht-tab__place {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ht-quiet);
+}
+.ht-tab:hover:not(.is-on):not(.ht-tab--past) { background: var(--sand-200); }
+.ht-tab:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -3px; }
+/* Selected is carried by fill AND by a gold marker, not by colour alone. */
+.ht-tab.is-on { background: var(--ht-deep); box-shadow: inset 0 3px 0 0 var(--ht-gold); }
+.ht-tab.is-on .ht-display { color: var(--gold-50); }
+.ht-tab.is-on .ht-tab__place { color: var(--ht-gold-soft); }
+.ht-tab--past { cursor: default; }
+.ht-tab--past .ht-display { color: var(--ink-700); }
+
+/* ============================================================
+   7 · Interior band
+   ============================================================ */
+
+.ht-interior {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  padding-block: var(--ht-y-lg);
+}
+.ht-interior__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+.ht-interior__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(110% 80% at 50% 40%, rgba(25, 26, 31, 0.5) 0%, rgba(25, 26, 31, 0.82) 100%),
+    linear-gradient(180deg, rgba(25, 26, 31, 0.5) 0%, rgba(25, 26, 31, 0.7) 100%);
+}
+
+.ht-interior__body { text-align: center; }
+.ht-interior__title {
+  font-size: clamp(2.1rem, 0.5rem + 6vw, 5rem);
+  color: var(--gold-50);
+  max-width: 20ch;
+  margin-inline: auto;
+}
+.ht-interior__word {
+  margin-top: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  font-size: clamp(2.25rem, 1rem + 5vw, 4rem);
+}
+.ht-interior__word em { font-style: italic; color: var(--ht-gold); }
+.ht-interior__lede {
+  max-width: 52ch;
+  margin: var(--space-5) auto 0;
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-on-dark);
+}
+
+/* ============================================================
+   8 · Gallery marquee
+   ============================================================ */
+
+.ht-marquee {
+  --ht-gap: var(--space-4);
+  background: var(--ht-paper);
+  padding-block: clamp(3rem, 1.5rem + 5vw, 6rem);
+  overflow: clip;
+  /* Fade both edges so the strip reads as continuous rather than cropped
+     by the viewport. */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+
+.ht-marquee__track {
+  display: flex;
+  gap: var(--ht-gap);
+  width: max-content;
+  /* Two identical runs; travelling one run's width lands the second copy
+     exactly where the first began. */
+  animation: ht-run 68s linear infinite;
+}
+.ht-marquee:hover .ht-marquee__track { animation-play-state: paused; }
+.ht-marquee__run { display: contents; }
+
+.ht-marquee__cell { margin: 0; flex: none; width: clamp(15rem, 26vw, 26rem); overflow: hidden; }
+.ht-marquee__cell img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  transition: transform 500ms var(--ease-out);
+}
+.ht-marquee__cell:hover img { transform: scale(1.04); }
+
+@keyframes ht-run {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - var(--ht-gap) / 2)); }
+}
+
+/* ============================================================
+   9 · Enquiry
+   ============================================================ */
+
+.ht-enquiry {
+  background: var(--ht-paper);
+  padding-block: var(--ht-y) clamp(5rem, 2rem + 8vw, 9rem);
+}
+
+.ht-enquiry .ht-enquiry__inner { max-width: var(--container-md); }
+.ht-enquiry__head { text-align: center; margin-bottom: clamp(2.75rem, 1.5rem + 3vw, 4.5rem); }
+.ht-enquiry__title { font-size: clamp(2.1rem, 0.8rem + 5vw, 4.5rem); }
+.ht-enquiry__lede {
+  margin-top: var(--space-5);
+  line-height: var(--leading-relaxed);
+  color: var(--ht-quiet);
+}
+
+.ht-form {
+  display: grid;
+  gap: var(--space-7) var(--space-6);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 700px) { .ht-form { grid-template-columns: 1fr 1fr; } }
+
+/* Underline fields: a rule and a label that lifts, nothing boxed. The label
+   is a real <label>, so it stays announced whether or not it has floated. */
+.ht-field { position: relative; }
+.ht-field--wide { grid-column: 1 / -1; }
+
+.ht-field input,
+.ht-field select {
+  width: 100%;
+  /* 18px + 16px line + 18px clears the 44px minimum target. */
+  padding: 18px 0;
+  border: 0;
+  border-bottom: 1px solid var(--ht-rule);
+  border-radius: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--ink-900);
+  transition: border-color var(--duration-base) var(--ease-out);
+}
+.ht-field select { appearance: none; color: var(--ink-900); cursor: pointer; }
+.ht-field select[data-empty='true'] { color: transparent; }
+.ht-field input:hover,
+.ht-field select:hover { border-bottom-color: var(--color-line-strong); }
+.ht-field input:focus,
+.ht-field select:focus { outline: none; border-bottom-color: var(--ht-gold); border-bottom-width: 1.5px; }
+.ht-field input:focus-visible,
+.ht-field select:focus-visible { outline: none; }
+/* Validation after the field is left, not on every keystroke. */
+.ht-field input:user-invalid { border-bottom-color: var(--color-action); border-bottom-width: 1.5px; }
+
+.ht-field label {
+  position: absolute;
+  left: 0;
+  top: 18px;
+  font-size: var(--text-base);
+  color: var(--ht-quiet);
+  pointer-events: none;
+  transform-origin: 0 0;
+  transition: transform var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+}
+.ht-field input:focus + label,
+.ht-field input:not(:placeholder-shown) + label,
+.ht-field select:focus + label,
+.ht-field select[data-empty='false'] + label {
+  transform: translateY(-1.5rem) scale(0.7);
+  color: var(--ht-gold-text);
+}
+
+.ht-hint {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ht-quiet);
+}
+
+.ht-field__chev {
+  position: absolute;
+  right: 0;
+  top: 18px;
+  color: var(--ht-quiet);
+  transform: rotate(90deg);
+  pointer-events: none;
+}
+
+.ht-form__send { grid-column: 1 / -1; justify-self: center; margin-top: var(--space-3); }
+.ht-form__fine {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--ht-quiet);
+}
+
+.ht-done {
+  text-align: center;
+  padding: var(--space-10) var(--space-5);
+  border: 1px solid var(--ht-rule);
+  background: var(--color-surface);
+}
+.ht-done__tick {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto var(--space-5);
+  border: 1px solid var(--color-gold-line);
+  border-radius: 50%;
+  color: var(--color-gold-deep);
+}
+.ht-done .ht-display { font-size: 1.875rem; display: block; margin-bottom: var(--space-3); }
+.ht-done p { color: var(--ht-quiet); max-width: 40ch; margin-inline: auto; line-height: var(--leading-relaxed); }
+
+/* ============================================================
+   The contact rail
+   ============================================================ */
+
+.ht-rail {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  /* Under the header, and well under the mobile drawer. */
+  z-index: 90;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+}
+@media (min-width: 1180px) { .ht-rail { display: flex; } }
+
+.ht-rail a {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  min-height: 54px;
+  background: var(--ht-deep);
+  color: var(--gold-100);
+  transition: background var(--duration-base) var(--ease-out), color var(--duration-base) var(--ease-out);
+}
+.ht-rail a:hover { background: var(--color-gold-deep); color: #fff; }
+.ht-rail a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -4px; }
+
+.ht-rail__call { gap: 14px; padding-block: var(--space-5); align-content: center; }
+.ht-rail__call span {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   Reduced motion — the page keeps its composition, loses its travel
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ht-hero { height: auto; }
+  .ht-hero__stage { position: relative; height: 92svh; }
+  .ht-marquee__track { animation: none; }
+  .ht-marquee { overflow-x: auto; }
+
+  .ht-card__media img,
+  .ht-card__arrow,
+  .ht-card__title,
+  .ht-marquee__cell img,
+  .ht-ring,
+  .ht-ring svg,
+  .ht-pill,
+  .ht-pill svg,
+  .ht-field label,
+  .ht-arrows button,
+  .ht-rail a,
+  .ht-tab { transition: none; }
+}
