@@ -1,4 +1,5 @@
 const nextConfig = {
+  output: 'export',
   reactStrictMode: true,
   async redirects() {
     return ['/home-two', '/home_two', '/home-2'].map((source) => ({ source, destination: '/', permanent: true }))

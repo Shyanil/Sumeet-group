@@ -1,11 +1,29 @@
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "22"
 
-# Netlify automatically provisions its Next.js runtime for SSR.
+[[redirects]]
+  from = "/api/leads"
+  to = "/.netlify/functions/leads"
+  status = 200
+
+[[redirects]]
+  from = "/home-two"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/home_two"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/home-2"
+  to = "/"
+  status = 301
 
 # Renders, logo and brochure keep stable filenames, so cache for a day
 # and let the CDN revalidate after that.

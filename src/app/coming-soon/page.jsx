@@ -2,7 +2,7 @@ import LeadForm from '../../components/LeadForm'
 import { LOGO, BRAND } from '../../data/site'
 import './teaser.css'
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
 const title = 'New real estate launch coming soon · Sumeet Group'
 const description = 'Sumeet Group is preparing to unveil a new real estate project. Register your interest to receive the official launch announcement and project details.'
 export const metadata = {
