@@ -1,50 +1,10 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
-import { RouterProvider, useRouter } from './lib/router'
+import { useRouter } from './lib/router'
 import { initSmoothScroll, destroySmoothScroll, resetScroll, ScrollTrigger } from './lib/scroll'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Home from './pages/Home'
-import HomeTwo from './pages/HomeTwo'
-import Projects from './pages/Projects'
-import ProjectDetail from './pages/ProjectDetail'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import NotFound from './pages/NotFound'
-
-/**
- * Route table.
- *
- * Only the home pages are live. Projects, About, Contact and the project
- * detail pages are built (see pages/) but are not being served yet, so every
- * other path lands on the holding page. The imports and the branches below
- * are kept rather than deleted: turning a page back on is uncommenting one
- * line, not rebuilding the route.
- *
- * "/home-two" is a second art direction for the home page, shown alongside
- * the live one for review. "/home_two" is accepted as the same route because
- * that is how it tends to get typed.
- */
-const LIVE = new Set(['/', '/home-two', '/home_two'])
-
-function Screen({ path }) {
-  // Treat /about and /about/ as the same route.
-  const p = path.length > 1 ? path.replace(/\/+$/, '') : path
-  if (!LIVE.has(p)) return <NotFound path={p} />
-  if (p === '/') return <Home />
-  if (p === '/home-two' || p === '/home_two') return <HomeTwo />
-  // Not yet served — add the path to LIVE above to bring one back.
-  if (p === '/projects') return <Projects />
-  if (p.startsWith('/projects/')) return <ProjectDetail slug={p.slice('/projects/'.length)} />
-  if (p === '/about') return <About />
-  if (p === '/contact') return <Contact />
-  return <NotFound path={p} />
-}
-
-const TITLES = {
-  '/': 'Sumeet Group · Real estate in Raipur',
-  '/home-two': 'Sumeet Group · Real estate in Raipur',
-  '/home_two': 'Sumeet Group · Real estate in Raipur',
-}
 
 /**
  * Mirror the tone of whichever full-bleed section is currently passing under
@@ -92,7 +52,7 @@ function useHeaderInversion(path) {
   }, [path])
 }
 
-function Shell() {
+export default function App({ children, initialTime }) {
   const { path } = useRouter()
   const firstRender = useRef(true)
 
@@ -122,11 +82,7 @@ function Shell() {
 
   useHeaderInversion(path)
 
-  // Keep the document title in step with the route; the detail pages set
-  // their own from the project name.
-  useEffect(() => {
-    document.title = TITLES[path] || 'Coming soon · Sumeet Group'
-  }, [path])
+  if (path === "/coming-soon") return children
 
   return (
     <div className="app">
@@ -135,17 +91,9 @@ function Shell() {
       </a>
       <Header />
       <main className="app__main" id="main">
-        <Screen path={path} />
+        {children}
       </main>
-      <Footer />
+      <Footer initialTime={initialTime} />
     </div>
-  )
-}
-
-export default function App() {
-  return (
-    <RouterProvider>
-      <Shell />
-    </RouterProvider>
   )
 }

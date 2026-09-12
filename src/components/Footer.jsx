@@ -23,10 +23,11 @@ const CLOSES = 19
  * daylight saving, so the offset is stable, but the reading is taken from
  * Intl against Asia/Kolkata rather than assumed from the browser.
  */
-function useOfficeClock() {
-  const [now, setNow] = useState(() => new Date())
+function useOfficeClock(initialTime) {
+  const [now, setNow] = useState(() => new Date(initialTime))
 
   useEffect(() => {
+    setNow(new Date())
     const id = setInterval(() => setNow(new Date()), 30_000)
     return () => clearInterval(id)
   }, [])
@@ -51,9 +52,9 @@ function useOfficeClock() {
   }, [now])
 }
 
-export default function Footer() {
-  const year = new Date().getFullYear()
-  const { time, open, note } = useOfficeClock()
+export default function Footer({ initialTime }) {
+  const year = new Date(initialTime).getUTCFullYear()
+  const { time, open, note } = useOfficeClock(initialTime)
 
   return (
     <footer className="fx">

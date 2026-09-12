@@ -44,3 +44,12 @@ Sumeet Group Website UI With Images.html
 # under public/Assets, so ignoring them here loses nothing and keeps ~8 MB
 # of dead weight out of the deploy and out of future clones.
 assets-unused/
+
+# Next.js
+.next/
+out/
+
+# Server-only integration credentials
+.env
+.env.*
+!.env.example

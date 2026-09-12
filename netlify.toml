@@ -1,22 +1,11 @@
 [build]
   command = "npm run build"
-  publish = "dist"
+  publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20"
-  NPM_FLAGS = "--legacy-peer-deps"
+  NODE_VERSION = "22"
 
-# Single-page app: every route falls back to index.html.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# Hashed bundles are immutable and safe to cache forever.
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+# Netlify automatically provisions its Next.js runtime for SSR.
 
 # Renders, logo and brochure keep stable filenames, so cache for a day
 # and let the CDN revalidate after that.

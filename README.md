@@ -8,16 +8,16 @@ site covering the two projects currently selling:
 | Sumeet Urban Nest | Residential, 2 & 3 BHK | Khamardih (Shankar Nagar) | New launch |
 | Sumeet Trade Centre | Commercial, office & retail | Pachpedi Naka Chowk | Under construction |
 
-Built with React 18 and Vite 5, styled by the approved **Sumeet Group design
+Built with Next.js 16, React and JavaScript, styled by the approved **Sumeet Group design
 system** (v1.0) — no CSS framework.
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev      # dev server on http://localhost:5173
-npm run build    # production build into dist/
-npm run preview  # preview the production build
+npm run dev      # dev server on http://localhost:3000
+npm run build    # production build into .next/
+npm start        # run the production SSR server
 ```
 
 ## Design system
@@ -45,17 +45,18 @@ Rules worth keeping:
 ## Structure
 
 ```
-public/Assets/            served at /Assets/… , copied into dist untouched
+public/Assets/            served at /Assets/…
   Brand/                  Sumeet Group lockups (primary, reversed, mark)
   Sumeet Urban Nest (SUN)/renders/   renders + plans extracted from the brochure
   3D Images/              Sumeet Trade Centre renders
 src/styles/               the design system (see above)
 src/components/ui/        design system primitives
 src/components/           Header, Footer, ProjectCard, Gallery, PlanViewer, EnquiryForm
-src/pages/                Home, Projects, ProjectDetail, About, Contact, NotFound
+src/app/                  Next.js routes, metadata, robots and sitemap
+src/views/                Approved HomeTwo, holding screen and unpublished pages
 src/data/site.js          brand strings, contact details, nav
 src/data/projects.js      both projects — the single source of page content
-src/lib/router.jsx        ~60-line history router
+src/lib/router.jsx        Next.js navigation adapter
 source-assets/            print-resolution masters (git-ignored, see below)
 ```
 
@@ -86,23 +87,31 @@ extracted from the brochure and resized to 1800px / q80.
 
 ## Deployment (Netlify)
 
-`netlify.toml` holds the full configuration. The router uses real paths, so the
-SPA fallback (`/* → /index.html`) is required — it is already configured.
+`netlify.toml` uses Netlify's Next.js runtime with `.next` as the build output
+and Node 22. SSR requires this runtime or a Node server running `npm start`.
+Do not deploy the old `dist` folder or add an SPA rewrite to `index.html`.
 
-| Setting | Value |
-| --- | --- |
-| Build command | `npm run build` |
-| Publish directory | `dist` |
-| Node version | 20 |
+The client-approved HomeTwo design is the main `/` route, rendered on every
+request. `/home-two`, `/home_two` and `/home-2` permanently redirect to `/`.
+The previous homepage has been removed. Other pages remain unpublished and
+return the existing holding screen with a real 404 status and `noindex`.
+
+Titles, descriptions, social metadata and the homepage canonical are included
+in server HTML. `/robots.txt` and `/sitemap.xml` include the main homepage.
+Set `SITE_URL` to the public production origin if it differs from
+`https://sumeetinfraventures.com` (the existing brand website).
+
+Source files use `.jsx` for React components and `.js` for data/configuration;
+there is no TypeScript compiler or TypeScript source. Use Node 20.9 or newer.
 
 ## Before going live
 
 1. **Prices.** Neither brochure quotes one, so both projects read
    "Price on request". Replace `price` / `priceUnit` in `src/data/projects.js`
    when sales confirm figures.
-2. **The enquiry form has no backend.** It validates and shows a confirmation,
-   but nothing is sent. Wire `EnquiryForm`'s `onSubmit` to Netlify Forms or the
-   CRM before launch.
+2. **Configure lead delivery.** The active homepage and teaser use `/api/leads`;
+   set the approved webhook before launch. The older `EnquiryForm` component
+   on unpublished views still needs migration before those pages are enabled.
 3. **Sumeet Trade Centre's RERA number** is not in the brochure — `rera.number`
    is `null` and the line is hidden until it's filled in.
 4. **Group statistics.** `GROUP_STATS` only carries figures countable from the
@@ -111,3 +120,24 @@ SPA fallback (`/* → /index.html`) is required — it is already configured.
    once confirmed.
 5. **Urban Nest brochure download.** Disabled (`brochure: null`) until a
    web-sized PDF exists; the 414 MB master cannot be served.
+
+## Landing-page revision and pre-launch teaser
+
+The main homepage now has a shorter hero, brochure and site-visit actions,
+a developer strip and an interactive gallery. `/coming-soon` is a separate,
+three-section teaser with illustrative architectural imagery and no project details. It is omitted
+from the sitemap and navigation and has `noindex`; this does not make it private.
+
+Copy `.env.example` to `.env.local` and configure `LEAD_WEBHOOK_URL` and, if
+needed, `LEAD_WEBHOOK_TOKEN` using the approved CRM/form destination. The server
+POSTs `{ name, phone, email, source, intent, consent, receivedAt }` as JSON.
+The webhook must return 2xx only after accepting the lead. No sensitive webhook
+configuration is sent to the browser. Missing configuration returns 503;
+delivery failures return 502 and the form keeps the visitor's details for retry.
+
+Project confidentiality, approved floor-plan downloads and brochure scope still
+need confirmation before publishing. Existing project assets remain in `public/`;
+a teaser's `noindex` setting does not protect those assets. See
+`docs/landing-page-feedback-email.md` for the consolidated draft and pending items.
+
+Run `npm test` for lead-validation and delivery-contract checks.

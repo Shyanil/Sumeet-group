@@ -1,0 +1,20 @@
+.lead-form { display: grid; gap: 18px; position: relative; }
+.lead-field { display: grid; gap: 8px; }
+.lead-field label { font-size: 13px; font-weight: 600; }
+.lead-field label span { font-weight: 400; color: #6a6c77; }
+.lead-field input { width: 100%; padding: 14px 0; border: 0; border-bottom: 1px solid #b8b6af; border-radius: 0; background: transparent; color: #23242a; font: inherit; font-size: 16px; }
+.lead-field input:focus { outline: 2px solid #946730; outline-offset: 5px; }
+.lead-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; line-height: 1.6; color: #55565c; }
+.lead-consent input { flex: 0 0 16px; height: 16px; margin-top: 3px; accent-color: #23242a; }
+.lead-submit { display: flex; justify-content: space-between; align-items: center; gap: 24px; border: 1px solid #23242a; border-radius: 4px; background: #23242a; color: white; padding: 17px 20px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.lead-submit:hover { background: #3b3d46; }
+.lead-submit:disabled { opacity: .6; cursor: wait; }
+.lead-submit span { font-size: 22px; }
+.lead-fine { color: #65666c; font-size: 11px; text-align: center; }
+.lead-error { padding: 12px; background: #fff0e6; color: #64280f; font-size: 13px; line-height: 1.6; }
+.lead-error a { text-decoration: underline; }
+.lead-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.lead-success { padding: 50px 0; }
+.lead-success > span { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 1px solid currentColor; border-radius: 50%; margin-bottom: 24px; }
+.lead-success h3 { font-family: var(--font-display); font-size: 36px; font-weight: 400; margin-bottom: 12px; }
+.lead-success p { font-size: 15px; line-height: 1.7; }

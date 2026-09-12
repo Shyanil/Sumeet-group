@@ -1,16 +1,11 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { Link } from '../lib/router'
 import { CONTACT } from '../data/site'
 import './NotFound.css'
 
-/**
- * The holding page.
- *
- * Every route but "/" lands here while the rest of the site is being built
- * (see the LIVE set in App.jsx). It is not an error page pretending to be a
- * feature: it names the path that was asked for, says plainly that the
- * section is not finished, and gives the two things that still work.
- */
+/** Holding screen for unavailable routes; Next.js returns a 404 status. */
 export default function NotFound({ path = '' }) {
   const [dots, setDots] = useState(1)
 

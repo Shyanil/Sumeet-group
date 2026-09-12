@@ -1057,3 +1057,59 @@
   .ht-rail a,
   .ht-tab { transition: none; }
 }
+
+/* Approved homepage refinements: a direct first screen and fewer sections. */
+.ht { --ht-y: clamp(48px, 6vw, 84px); --ht-y-lg: clamp(56px, 7vw, 100px); }
+.ht-hero--focused { height: auto; min-height: 0; }
+.ht-hero--focused .ht-hero__stage { display: flex; align-items: flex-end; position: relative; height: min(760px, calc(100svh - 76px)); min-height: 580px; }
+.ht-hero--focused .ht-hero__copy { position: relative; inset: auto; width: 100%; padding-top: 120px; padding-bottom: 64px; }
+.ht-hero__single { color: #fffdf8; font-size: clamp(54px, 6.4vw, 92px); margin-bottom: 22px; }
+.ht-hero__single em { color: #ecd8ae; }
+.ht-hero__summary { max-width: 420px; color: #f5f0e6; font-size: 17px; line-height: 1.7; }
+.ht-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.ht .ht-pill--white { background: #fffdf8; color: #23242a; border-color: #fffdf8; }
+.ht .ht-pill--white:hover { background: #ecd8ae; border-color: #ecd8ae; }
+.ht-hero__caption { font-size: 10px; letter-spacing: .06em; color: #e5dfd4; margin-top: 20px; }
+.ht-trust { background: #efe9dc; border-bottom: 1px solid #dfd7c9; padding: 30px 0; }
+.ht-trust__inner { display: flex; gap: 30px; justify-content: space-between; align-items: center; }
+.ht-trust .ht-kicker { margin-bottom: 10px; font-size: 9px; }
+.ht-trust h2 { font-family: var(--font-display); font-size: 32px; font-weight: 400; }
+.ht-trust p { font-size: 11px; color: #63615c; margin-top: 5px; }
+.ht-trust__facts { display: flex; gap: clamp(25px,5vw,75px); }
+.ht-trust__facts div { display: grid; gap: 7px; }
+.ht-trust__facts strong { font-family: var(--font-display); font-size: 38px; font-weight: 400; }
+.ht-trust__facts span { font-size: 11px; color: #63615c; }
+.ht-gallery { padding: var(--ht-y) 0; background: #f6f3ec; }
+.ht-gallery__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 30px; }
+.ht-gallery h2 { font-size: clamp(38px,4.2vw,60px); }
+.ht-gallery__head > p { max-width: 310px; font-size: 14px; line-height: 1.7; color: #61616a; }
+.ht-gallery__filters { display: flex; gap: 9px; flex-wrap: wrap; margin-bottom: 24px; }
+.ht-gallery__filters button { font: inherit; font-size: 12px; color: #414149; border: 1px solid #c9c3b8; border-radius: 30px; padding: 9px 17px; background: transparent; cursor: pointer; }
+.ht-gallery__filters button[aria-pressed='true'] { background: #23242a; color: white; border-color: #23242a; }
+.ht-gallery .gallery { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; }
+.ht-gallery .gallery__item { aspect-ratio: 1.2; border-radius: 3px; }
+.ht-gallery__note { color: #676771; font-size: 10px; margin-top: 18px; }
+.ht-enquiry--focused { background: #ece5d7; }
+.ht-enquiry--focused .ht-enquiry__inner { gap: clamp(35px,9vw,130px); }
+.ht-enquiry--focused .ht-enquiry__title { font-size: clamp(40px,4.5vw,64px); }
+.ht-enquiry__phone { display: inline-block; font-family: var(--font-display); font-size: 26px; margin-top: 30px; color: #23242a; }
+.ht-enquiry__hours { font-size: 12px; color: #61616a; margin-top: 6px; }
+.ht-enquiry--focused .lead-form { background: #fffdf9; padding: 30px; border-radius: 5px; }
+.site-header .sg-btn--primary { background: #23242a; border-color: #23242a; color: white; }
+.site-header .sg-btn--primary:hover { background: #414149; border-color: #414149; }
+@media(max-width: 760px) {
+ .ht-hero--focused .ht-hero__stage { height: auto; min-height: 630px; }
+ .ht-hero--focused .ht-hero__copy { padding-top: 170px; padding-bottom: 38px; }
+ .ht-hero__single { font-size: clamp(43px,10vw,64px); }
+ .ht-hero__summary { font-size: 14px; max-width: 300px; }
+ .ht-hero__actions { gap: 10px; margin-top: 23px; }
+ .ht-hero__actions .ht-pill { min-height: 47px; font-size: 9px; letter-spacing: .12em; padding-inline: 17px; }
+ .ht-trust__inner { align-items: flex-start; flex-direction: column; gap: 22px; }
+ .ht-trust__facts { justify-content: space-between; width: 100%; gap: 12px; }
+ .ht-trust__facts strong { font-size: 32px; }
+ .ht-trust__facts span { font-size: 10px; }
+ .ht-gallery__head { display: block; }
+ .ht-gallery__head > p { margin-top: 20px; }
+ .ht-gallery .gallery { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+ .ht-enquiry--focused .lead-form { padding: 24px; }
+}

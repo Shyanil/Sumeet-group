@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react'
  */
 export default function Reveal({ children, as: Tag = 'div', delay = 0, className = '', style, ...rest }) {
   const ref = useRef(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const node = ref.current
@@ -20,6 +20,8 @@ export default function Reveal({ children, as: Tag = 'div', delay = 0, className
       setVisible(true)
       return
     }
+
+    if (node.getBoundingClientRect().top >= window.innerHeight) setVisible(false)
 
     const observer = new IntersectionObserver(
       ([entry]) => {
